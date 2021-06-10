@@ -1,0 +1,29 @@
+######################################################################
+# Open file in neovim 
+
+function nv () {
+	nvim $1
+}
+
+######################################################################
+# ll
+
+alias ll="ls -l"
+alias la="ls -la"
+
+
+
+######################################################################
+# Copy file or dir path to pasteboard
+
+function pwc() {
+    if [ -z "$1" ]
+    then
+        pwd | tr -d '\n' | pbcopy
+    else
+        initial_string="$(pwd | tr -d '\n')/$1"
+        echo $initial_string | tr -d '\n' | pbcopy
+    fi
+}
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
