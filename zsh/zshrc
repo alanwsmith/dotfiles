@@ -5,13 +5,23 @@ function nv () {
 	nvim $1
 }
 
+function n () {
+	nvim $1
+}
+
+######################################################################
+
+function e () {
+    exit 
+}
+
 ######################################################################
 # ll
 
 alias ll="ls -l"
+alias sl="ls -l"
 alias la="ls -la"
-
-
+alias l="ls -l"
 
 ######################################################################
 # Copy file or dir path to pasteboard
@@ -25,5 +35,49 @@ function pwc() {
         echo $initial_string | tr -d '\n' | pbcopy
     fi
 }
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+
+# eval "$(pyenv init -)"
+# eval "$(pyenv virtualenv-init -)"
+# eval "$(starship init zsh)"
+
+
+# PROMPT='%(?.%F{green}√.%F{red}?%?)%f %B%F{240}%1~%f%b %# '
+
+# Setup so you don't have to type `cd` to get into a directory 
+setopt AUTO_CD
+setopt CDABLE_VARS
+
+# Set colors for ls
+export CLICOLOR=1
+export LSCOLORS=GxFxCxDxBxegedabagaced
+
+function show_git_branch() {
+    BRANCH_NAME=$(git branch --show-current 2> /dev/null)
+    if [ $? -eq 0 ]; then
+        echo " %F{8}·%F{21}[$BRANCH_NAME]"
+    fi 
+}
+
+function preexec() {
+    timer=$(($(print -P %D{%s%6.})/1000))
+}
+
+function show_timer() {
+  if [ $timer ]; then
+    now=$(($(print -P %D{%s%6.})/1000))
+    elapsed=$(($now-$timer))
+
+    echo "%F{cyan}${elapsed}ms %{$reset_color%}"
+    unset timer
+  fi
+}
+
+function precmd() {
+    PROMPT="%F{8}┌── %B%F{33}nexus:%~ %F{8}·%F{33}%D{%-I:%M%p}%(?. %F{8}·%F{22}OK. %F{8}%F{red}Error: %?)$(show_git_branch)%f%b 
+%F{8}└%f %(!.#.$) "
+}
+
+
+
+
+

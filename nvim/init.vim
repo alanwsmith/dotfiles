@@ -14,7 +14,7 @@ call plug#begin("~/.vim/plugged")
     Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
     Plug 'nvim-lua/completion-nvim'
     Plug 'fannheyward/telescope-coc.nvim'
-    Plug 'alanwsmith/neovim-grimoire'
+    " Plug 'alanwsmith/neovim-grimoire'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
@@ -67,15 +67,30 @@ map <leader>q :q<cr>
 " Telescope
 """"""""""""""""""""""
 
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-
-
 lua << EOF
 -- require('telescope').load_extension('coc')
 require('plugins')
-EOF
 
+--local snap = require'snap'
+--
+--local limit = snap.get'consumer.limit'
+--local producer_file = snap.get'producer.ripgrep.file'
+--local producer_vimgrep = snap.get'producer.ripgrep.vimgrep'
+--local producer_buffer = snap.get'producer.vim.buffer'
+--local producer_oldfile = snap.get'producer.vim.oldfile'
+--local select_file = snap.get'select.file'
+--local select_vimgrep = snap.get'select.vimgrep'
+--local preview_file = snap.get'preview.file'
+--local preview_vimgrep = snap.get'preview.vimgrep'
+
+-- snap.register.map({'n'}, {'<Leader><Leader>'}, function ()
+--   snap.run({
+--     prompt = 'Grep',
+--     producer = limit(10000, producer_vimgrep),
+--     select = select_vimgrep.select,
+--     multiselect = select_vimgrep.multiselect,
+--     views = {preview_vimgrep}
+--   })
+-- end)
+EOF
 
