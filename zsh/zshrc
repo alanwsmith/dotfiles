@@ -54,7 +54,7 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 function show_git_branch() {
     BRANCH_NAME=$(git branch --show-current 2> /dev/null)
     if [ $? -eq 0 ]; then
-        echo " %F{8}·%F{33}[$BRANCH_NAME]"
+        echo " %F{8}· %F{33}[$BRANCH_NAME]"
     fi 
 }
 
@@ -72,12 +72,18 @@ function show_timer() {
   fi
 }
 
+function show_date_time() {
+    AM_PM=$(date +%p) 
+    if [[ $AM_PM == "PM" ]]; then
+        date +%-I:%Mpm
+    else 
+        date +%-I:%Mam
+    fi 
+}
 function precmd() {
-    PROMPT="%F{8}┌── %B%F{33}nexus:%~ %F{8}·%F{33}%D{%-I:%M%p}%(?. %F{8}·%F{22}OK. %F{8}%F{red}Error: %?)$(show_git_branch)%f%b 
+    PROMPT="%F{8}┌── %B%F{33}nexus:%~ %F{8}· %F{33}$(show_date_time)%(?. %F{8}· %F{22}OK. %F{8}· %F{red}Error: %?)$(show_git_branch)%f%b 
 %F{8}└%f %(!.#.$) "
 }
-
-
 
 
 
