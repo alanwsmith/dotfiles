@@ -4,18 +4,21 @@ call plug#begin("~/.vim/plugged")
     Plug 'nvim-lua/popup.nvim'
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim'
-    Plug 'vimwiki/vimwiki'
+    Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+    " Plug 'vimwiki/vimwiki'
     Plug 'sharkdp/bat'
     Plug 'sharkdp/fd'
     Plug 'BurntSushi/ripgrep'
     Plug 'nvim-treesitter/nvim-treesitter'
     Plug 'kyazdani42/nvim-web-devicons'
-    Plug 'code-biscuits/nvim-biscuits'
-    Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+    " Plug 'code-biscuits/nvim-biscuits'
     Plug 'nvim-lua/completion-nvim'
     Plug 'fannheyward/telescope-coc.nvim'
     " Plug 'alanwsmith/neovim-grimoire'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'godlygeek/tabular'
+    Plug 'plasticboy/vim-markdown'
+    Plug 'theHamsta/nvim_rocks', {'do': 'pip3 install --user hererocks && python3 -mhererocks . -j2.1.0-beta3 -r3.0.0 && cp nvim_rocks.lua lua'}
 call plug#end()
 
 " Config
@@ -67,9 +70,16 @@ map <leader>q :q<cr>
 " Telescope
 """"""""""""""""""""""
 
+
+
 lua << EOF
 -- require('telescope').load_extension('coc')
 require('plugins')
+
+local nvim_rocks = require'nvim_rocks'
+nvim_rocks.ensure_installed('lua-cjson')
+-- nvim_rocks.remove('lua-cjson')
+
 
 --local snap = require'snap'
 --
