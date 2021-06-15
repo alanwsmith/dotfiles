@@ -1,22 +1,20 @@
 ######################################################################
-# Open file in neovim 
+# Alias style functions 
 
-function nv () {
-	nvim $1
-}
-
-function n () {
-	nvim $1
+function e () {
+    exit 
 }
 
 function mr () {
     rm "$1"
 }
 
-######################################################################
+function n () {
+	nvim $1
+}
 
-function e () {
-    exit 
+function nv () {
+	nvim $1
 }
 
 ######################################################################
