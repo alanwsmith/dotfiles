@@ -60,6 +60,13 @@ function show_git_branch() {
     fi 
 }
 
+function show_git_status() {
+    NUMBER_OF_CHANGES=$(git status --short 2> /dev/null | wc -l | tr -d " ")
+    if [ $NUMBER_OF_CHANGES -ne "0" ]; then 
+        echo "%F{237}[%F{237}$NUMBER_OF_CHANGES%F{237}]"
+    fi
+}
+
 function preexec() {
     timer=$(($(print -P %D{%s%6.})/1000))
 }
@@ -68,7 +75,6 @@ function show_timer() {
   if [ $timer ]; then
     now=$(($(print -P %D{%s%6.})/1000))
     elapsed=$(($now-$timer))
-
     echo "%F{cyan}${elapsed}ms %{$reset_color%}"
     unset timer
   fi
@@ -82,8 +88,9 @@ function show_date_time() {
         date +%-I:%Mam
     fi 
 }
+
 function precmd() {
-    PROMPT="%F{8}┌── %B%F{33}nexus:%~ %F{8}· %F{33}$(show_date_time)%(?. %F{8}· %F{22}OK. %F{8}· %F{red}Error: %?)$(show_git_branch)%f%b 
+    PROMPT="%F{8}┌── %B%F{33}nexus:%~ %F{8}· %F{33}$(show_date_time)%(?. %F{8}· %F{22}OK. %F{8}· %F{red}Error: %?)$(show_git_branch)$(show_git_status)%f%b 
 %F{8}└%f %(!.#.$) "
 }
 
