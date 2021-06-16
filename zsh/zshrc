@@ -45,10 +45,6 @@ function pwc() {
     fi
 }
 
-# eval "$(pyenv init -)"
-# eval "$(pyenv virtualenv-init -)"
-# eval "$(starship init zsh)"
-
 # Setup so you don't have to type `cd` to get into a directory 
 setopt AUTO_CD
 setopt CDABLE_VARS
