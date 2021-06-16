@@ -1,6 +1,10 @@
 ######################################################################
 # Alias style functions 
 
+function rc () {
+    exec zsh 
+}
+
 function e () {
     exit 
 }
@@ -42,9 +46,6 @@ function pwc() {
 # eval "$(pyenv virtualenv-init -)"
 # eval "$(starship init zsh)"
 
-
-# PROMPT='%(?.%F{green}√.%F{red}?%?)%f %B%F{240}%1~%f%b %# '
-
 # Setup so you don't have to type `cd` to get into a directory 
 setopt AUTO_CD
 setopt CDABLE_VARS
@@ -65,6 +66,13 @@ function show_git_status() {
     if [ $NUMBER_OF_CHANGES -ne "0" ]; then 
         echo "%F{237}[%F{237}$NUMBER_OF_CHANGES%F{237}]"
     fi
+}
+
+function show_git_line_changes() {
+    
+
+
+
 }
 
 function preexec() {
