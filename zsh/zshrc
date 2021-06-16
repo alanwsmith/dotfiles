@@ -9,6 +9,9 @@ function e () {
     exit 
 }
 
+# These aren't great since they only deal with 
+# one argument. 
+
 function mr () {
     rm "$1"
 }
@@ -54,18 +57,31 @@ setopt CDABLE_VARS
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
+
+######################################################################
+# Prmopt stuff
+
+NEWLINE=$'\n'
+COLOR1='%F{33}'
+COLOR2='%F{8}'
+COLOR3='%F{22}'
+COLOR4='%F{160}'
+
+function preexec() {
+    timer=$(($(print -P %D{%s%6.})/1000))
+}
+
 function show_git_branch() {
     BRANCH_NAME=$(git branch --show-current 2> /dev/null)
     if [ $? -eq 0 ]; then
-        echo -n " %F{8}· %F{4}[$BRANCH_NAME]"
+        echo -n " ${COLOR3}[$BRANCH_NAME]"
     fi 
 }
 
 function show_git_status() {
     NUMBER_OF_CHANGES=$(git status --short 2> /dev/null | wc -l | tr -d " ")
     if [ $NUMBER_OF_CHANGES -ne "0" ]; then 
-        # echo -n "%F{237}[%F{237}$NUMBER_OF_CHANGES,"
-        echo -n "%F{12}["
+        echo -n "${COLOR3}["
         NUMBER_A=$(git diff --shortstat 2> /dev/null | cut -d' ' -f5)
         NUMBER_B=$(git diff --shortstat 2> /dev/null | cut -d' ' -f7)
         if [ -z "$NUMBER_B" ]; then
@@ -75,10 +91,6 @@ function show_git_status() {
         fi
         echo -n "]"
     fi
-}
-
-function preexec() {
-    timer=$(($(print -P %D{%s%6.})/1000))
 }
 
 function show_timer() {
@@ -101,16 +113,21 @@ function show_date_time() {
 
 
 function precmd() {
-    NEWLINE=$'\n'
-    PROMPT="%F{8}┌── "
-    PROMPT="${PROMPT}%B%F{33}nexus:%~ "
-    PROMPT="${PROMPT}%F{8}· %F{33}$(show_date_time)"
+    PROMPT="%B"
+    PROMPT="${PROMPT}${COLOR2}"
+    PROMPT="${PROMPT}┌── "
+    PROMPT="${PROMPT}${COLOR1}"
+    PROMPT="${PROMPT}nexus:%~"
+    PROMPT="${PROMPT} ${COLOR2}· ${COLOR3}$(show_date_time)"
     PROMPT="${PROMPT}$(show_git_branch)"
-    PROMPT="${PROMPT}$(show_git_status)%f%b"
-    PROMPT="${PROMPT}%(?. %F{8}· %F{22}OK. %F{8}· %F{red}Error: %?)"
+    PROMPT="${PROMPT}$(show_git_status)"
+    PROMPT="${PROMPT}%(?. ${COLOR2}· ${COLOR3}OK. ${COLOR2}· ${COLOR4}Error: %?)"
     PROMPT="${PROMPT}${NEWLINE}"
-    PROMPT="${PROMPT}%F{8}└%f %(!.#.$) "
+    PROMPT="${PROMPT}${COLOR2}"
+    PROMPT="${PROMPT}└ "
+    PROMPT="${PROMPT}%f"
+    PROMPT="${PROMPT}%(!.#.$) "
+    PROMPT="${PROMPT}%b"
 }
-
 
 
