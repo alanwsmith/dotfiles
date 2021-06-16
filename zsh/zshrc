@@ -57,7 +57,7 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 function show_git_branch() {
     BRANCH_NAME=$(git branch --show-current 2> /dev/null)
     if [ $? -eq 0 ]; then
-        echo -n " %F{8}· %F{60}[$BRANCH_NAME]"
+        echo -n " %F{8}· %F{4}[$BRANCH_NAME]"
     fi 
 }
 
@@ -65,7 +65,7 @@ function show_git_status() {
     NUMBER_OF_CHANGES=$(git status --short 2> /dev/null | wc -l | tr -d " ")
     if [ $NUMBER_OF_CHANGES -ne "0" ]; then 
         # echo -n "%F{237}[%F{237}$NUMBER_OF_CHANGES,"
-        echo -n "%F{60}["
+        echo -n "%F{12}["
         NUMBER_A=$(git diff --shortstat 2> /dev/null | cut -d' ' -f5)
         NUMBER_B=$(git diff --shortstat 2> /dev/null | cut -d' ' -f7)
         if [ -z "$NUMBER_B" ]; then
@@ -99,9 +99,17 @@ function show_date_time() {
     fi 
 }
 
+
 function precmd() {
-    PROMPT="%F{8}┌── %B%F{33}nexus:%~ %F{8}· %F{33}$(show_date_time)%(?. %F{8}· %F{22}OK. %F{8}· %F{red}Error: %?)$(show_git_branch)$(show_git_status)%f%b 
-%F{8}└%f %(!.#.$) "
+    NEWLINE=$'\n'
+    PROMPT="%F{8}┌── "
+    PROMPT="${PROMPT}%B%F{33}nexus:%~ "
+    PROMPT="${PROMPT}%F{8}· %F{33}$(show_date_time)"
+    PROMPT="${PROMPT}$(show_git_branch)"
+    PROMPT="${PROMPT}$(show_git_status)%f%b"
+    PROMPT="${PROMPT}%(?. %F{8}· %F{22}OK. %F{8}· %F{red}Error: %?)"
+    PROMPT="${PROMPT}${NEWLINE}"
+    PROMPT="${PROMPT}%F{8}└%f %(!.#.$) "
 }
 
 
