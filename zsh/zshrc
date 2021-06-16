@@ -1,6 +1,5 @@
 ######################################################################
 # Alias style functions 
-#
 
 function rc () {
     exec zsh 
@@ -58,7 +57,7 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 function show_git_branch() {
     BRANCH_NAME=$(git branch --show-current 2> /dev/null)
     if [ $? -eq 0 ]; then
-        echo -n " %F{8}· %F{33}[$BRANCH_NAME]"
+        echo -n " %F{8}· %F{60}[$BRANCH_NAME]"
     fi 
 }
 
@@ -66,7 +65,7 @@ function show_git_status() {
     NUMBER_OF_CHANGES=$(git status --short 2> /dev/null | wc -l | tr -d " ")
     if [ $NUMBER_OF_CHANGES -ne "0" ]; then 
         # echo -n "%F{237}[%F{237}$NUMBER_OF_CHANGES,"
-        echo -n "["
+        echo -n "%F{60}["
         NUMBER_A=$(git diff --shortstat 2> /dev/null | cut -d' ' -f5)
         NUMBER_B=$(git diff --shortstat 2> /dev/null | cut -d' ' -f7)
         if [ -z "$NUMBER_B" ]; then
