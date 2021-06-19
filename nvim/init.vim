@@ -11,7 +11,7 @@ call plug#begin("~/.vim/plugged")
     Plug 'BurntSushi/ripgrep'
     Plug 'nvim-treesitter/nvim-treesitter'
     Plug 'kyazdani42/nvim-web-devicons'
-    " Plug 'code-biscuits/nvim-biscuits'
+    Plug 'code-biscuits/nvim-biscuits'
     Plug 'nvim-lua/completion-nvim'
     Plug 'fannheyward/telescope-coc.nvim'
     " Plug 'alanwsmith/neovim-grimoire'
@@ -20,6 +20,9 @@ call plug#begin("~/.vim/plugged")
     Plug 'plasticboy/vim-markdown'
     Plug 'theHamsta/nvim_rocks', {'do': 'pip3 install --user hererocks && python3 -mhererocks . -j2.1.0-beta3 -r3.0.0 && cp nvim_rocks.lua lua'}
 call plug#end()
+
+" Disable plasticboy/vim-markdown folding
+let g:vim_markdown_folding_disabled = 1
 
 " Config
 if (has("termguicolors"))

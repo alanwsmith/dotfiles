@@ -70,14 +70,14 @@ function preexec() {
 function show_git_branch() {
     BRANCH_NAME=$(git branch --show-current 2> /dev/null)
     if [ $? -eq 0 ]; then
-        echo -n " ${COLOR3}[$BRANCH_NAME]"
+        echo -n " ${COLOR2}· ${COLOR1}[$BRANCH_NAME]"
     fi 
 }
 
 function show_git_status() {
     NUMBER_OF_CHANGES=$(git status --short 2> /dev/null | wc -l | tr -d " ")
     if [ $NUMBER_OF_CHANGES -ne "0" ]; then 
-        echo -n "${COLOR3}["
+        echo -n "${COLOR1}["
         NUMBER_A=$(git diff --shortstat 2> /dev/null | cut -d' ' -f5)
         NUMBER_B=$(git diff --shortstat 2> /dev/null | cut -d' ' -f7)
         if [ -z "$NUMBER_B" ]; then
@@ -93,7 +93,10 @@ function show_timer() {
   if [ $timer ]; then
     now=$(($(print -P %D{%s%6.})/1000))
     elapsed=$(($now-$timer))
-    echo "%F{cyan}${elapsed}ms %{$reset_color%}"
+    elapsed_2=$((elapsed/1000))
+    # echo " ${COLOR2}· ${COLOR1}${elapsed_2}. sec"
+    seconds_with_decimals=$(echo $elapsed|awk '{printf "%.2f",$0/1000}')
+    echo " ${COLOR2}· ${COLOR1}${seconds_with_decimals}sec"
     unset timer
   fi
 }
@@ -107,6 +110,11 @@ function show_date_time() {
     fi 
 }
 
+function show_python_venv() {
+    if [ -n "$VIRTUAL_ENV" ]; then 
+        echo -n " ${COLOR2}· ${maroon}VENV"
+    fi
+}
 
 function precmd() {
     PROMPT="%B"
@@ -114,10 +122,12 @@ function precmd() {
     PROMPT="${PROMPT}┌── "
     PROMPT="${PROMPT}${COLOR1}"
     PROMPT="${PROMPT}nexus:%~"
-    PROMPT="${PROMPT} ${COLOR2}· ${COLOR3}$(show_date_time)"
+    PROMPT="${PROMPT} ${COLOR2}· ${COLOR1}$(show_date_time)"
     PROMPT="${PROMPT}$(show_git_branch)"
     PROMPT="${PROMPT}$(show_git_status)"
     PROMPT="${PROMPT}%(?. ${COLOR2}· ${COLOR3}OK. ${COLOR2}· ${COLOR4}Error: %?)"
+    PROMPT="${PROMPT}$(show_python_venv)"
+    PROMPT="${PROMPT}$(show_timer)"
     PROMPT="${PROMPT}${NEWLINE}"
     PROMPT="${PROMPT}${COLOR2}"
     PROMPT="${PROMPT}└ "
