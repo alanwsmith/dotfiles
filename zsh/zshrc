@@ -24,6 +24,21 @@ function nv () {
 	nvim $1
 }
 
+# Run ps then grep the results
+function psg () {
+    if [ "$1" ]
+    then
+        if [ "$2" ]
+        then
+            echo "You passed too many arguments"
+        else
+            ps aux | grep "$1"
+        fi
+    else
+        echo "You need to pass an argument"
+    fi
+}
+
 ######################################################################
 # ll
 
