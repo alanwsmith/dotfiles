@@ -42,10 +42,10 @@ function psg () {
 ######################################################################
 # ll
 
-alias ll="ls -l"
-alias sl="ls -l"
-alias la="ls -la"
-alias l="ls -l"
+alias ll="ls -lh"
+alias sl="ls -lh"
+alias la="ls -lah"
+alias l="ls -lh"
 
 ######################################################################
 # Copy file or dir path to pasteboard
