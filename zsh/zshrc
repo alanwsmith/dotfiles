@@ -32,7 +32,7 @@ function psg () {
         then
             echo "You passed too many arguments"
         else
-            ps aux | grep "$1"
+            ps aux | grep -i "$1"
         fi
     else
         echo "You need to pass an argument"
