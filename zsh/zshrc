@@ -87,11 +87,16 @@ COLOR6='%F{33}'
 COLOR8='%F{130}'
 
 COLOR_PROMPT='%F{15}'
-COLOR_BORDER='%F{88}'
+COLOR_BORDER='%F{335}'
 COLOR_PRIMARY='%F{246}'
-COLOR_SECODARY='%F{241}'
+COLOR_SECONDARY='%F{241}'
 COLOR_TERTIARY='%F{241}'
 COLOR_SEPERATOR='%F{239}'
+
+OFFSET_PRIMARY="${#COLOR_PRIMARY}"
+OFFSET_SECONDARY="${#COLOR_SECONDARY}"
+OFFSET_SEPERATOR="${#COLOR_SEPERATOR}"
+OFFSET_TERTIARY="${#COLOR_TERTIARY}"
 
 C1OFFSET=7
 C2OFFSET=7
@@ -112,6 +117,9 @@ function show_git_branch() {
     BRANCH_NAME=$(git branch --show-current 2> /dev/null)
     if [ $? -eq 0 ]; then
         echo -n " ${COLOR_SEPERATOR}· ${COLOR_TERTIARY}[$BRANCH_NAME]"
+        return $(($OFFSET_SEPERATOR+$OFFSET_TERTIARY))
+    else
+        return 0
     fi 
 }
 
@@ -128,7 +136,7 @@ function show_git_status() {
             echo -n $(($NUMBER_A + $NUMBER_B))
         fi
         echo -n "]"
-        return $C7OFFSET
+        return $OFFSET_TERTIARY
     else 
         return 0
     fi
@@ -141,9 +149,9 @@ function show_timer() {
     elapsed_2=$((elapsed/1000))
     # echo " ${COLOR_SEPERATOR}· ${COLOR_BORDER}${elapsed_2}. sec"
     seconds_with_decimals=$(echo $elapsed|awk '{printf "%.2f",$0/1000}')
-    echo " ${COLOR_SEPERATOR}· ${COLOR_SECODARY}${seconds_with_decimals}sec"
+    echo " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}${seconds_with_decimals}sec"
     unset timer
-    return $(($C1OFFSET+$C2OFFSET))
+    return $(($OFFSET_SEPERATOR+$OFFSET_SECONDARY))
   else
     return 0
   fi
@@ -179,25 +187,35 @@ function precmd() {
     # The offset is adjusted based off the return value from the funciton calls
     PROMPT=""
     PROMPT="%B"
-    # OFFSET=$(($OFFSET+2))
+    OFFSET=$(($OFFSET+2))
     # PROMPT="${PROMPT}${COLOR_SEPERATOR}"
     # OFFSET=$(($OFFSET+$C7OFFSET))
     # PROMPT="${PROMPT}├── "
     # PROMPT="${PROMPT}├ "
     PROMPT="${PROMPT}└ "
     PROMPT="${PROMPT}${COLOR_PRIMARY}"
-    # OFFSET=$(($OFFSET+$C7OFFSET))
-    PROMPT="${PROMPT}nexus:%~"
-    # PROMPT="${PROMPT}nexus:$(dirs)"
-    PROMPT="${PROMPT} ${COLOR_SEPERATOR}· ${COLOR_SECODARY}$(show_date_time)"
+    OFFSET=$(($OFFSET+$OFFSET_PRIMARY))
+    # PROMPT="${PROMPT}nexus:%~"
+    PROMPT="${PROMPT}nexus:$(dirs)"
+    PROMPT="${PROMPT} ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}$(show_date_time)"
+
+    # PROMPT="${PROMPT}${OFFSET}"
+    OFFSET=$(($OFFSET+$OFFSET_SEPERATOR+$OFFSET_SECONDARY))
+    # PROMPT="${PROMPT}${OFFSET}"
+
     PROMPT="${PROMPT}$(show_git_branch)"
-#     OFFSET=$(($OFFSET+$?))
+    OFFSET=$(($OFFSET+$?))
     PROMPT="${PROMPT}$(show_git_status)"
+    OFFSET=$(($OFFSET+$?))
+#     PROMPT="${PROMPT}%(?. ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}OK. ${COLOR_SEPERATOR}· ${COLOR4}Error: %?)"
+#     OFFSET=$(($OFFSET+${OFFSET_SEPERATOR}+${OFFSET_SECONDARY}))
+
+    # TODO: Get an offset for this
+    # PROMPT="${PROMPT}$(show_python_venv)"
+
+#     PROMPT="${PROMPT}$(show_timer)"
 #     OFFSET=$(($OFFSET+$?))
-    PROMPT="${PROMPT}%(?. ${COLOR_SEPERATOR}· ${COLOR_SECODARY}OK. ${COLOR_SEPERATOR}· ${COLOR4}Error: %?)"
-    PROMPT="${PROMPT}$(show_python_venv)"
-    PROMPT="${PROMPT}$(show_timer)"
-#     OFFSET=$(($OFFSET+$?))
+
     # PROMPT="${PROMPT} "
     # PROMPT="${PROMPT}${COLOR_BORDER} "
     # OFFSET=$(($OFFSET+$C1OFFSET))
@@ -206,7 +224,9 @@ function precmd() {
     # COUNTER=$(( $(tput cols) - ${#PROMPT} - $OFFSET + 1))
     
     # COUNTER=$(( $(tput cols) - ${#PROMPT} + $OFFSET ))
-    # PROMPT="${PROMPT}$(printf '─%.0s' {1..$COUNTER})"
+    COUNTER=$(( ${#PROMPT} - $OFFSET ))
+    PROMPT_LINE="┌$(printf '─%.0s' {2..$COUNTER})"
+    PROMPT_LINE="${PROMPT_LINE}${NEWLINE}"
 
     # PROMPT="${PROMPT}${COUNTER}"
 #     PROMPT="${PROMPT}${COLOR_SEPERATOR}"
