@@ -75,21 +75,31 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 # Prmopt stuff
 
 NEWLINE=$'\n'
-COLOR1='%F{19}'
-COLOR2='%F{8}'
-COLOR3='%F{22}'
+# COLOR_BORDER='%F{19}'
+# COLOR_BORDER='%F{124}'
+# COLOR_SEPERATOR='%F{8}'
+# COLOR_SEPERATOR='%F{252}'
+COLOR3='%F{88}'
 COLOR4='%F{160}'
 COLOR5='%F{20}'
 COLOR6='%F{33}'
-COLOR7='%F{22}'
+# COLOR_SEPERATOR='%F{22}'
+COLOR8='%F{130}'
 
-C1OFFSET=6
-C2OFFSET=5
+COLOR_PROMPT='%F{15}'
+COLOR_BORDER='%F{88}'
+COLOR_PRIMARY='%F{246}'
+COLOR_SECODARY='%F{239}'
+COLOR_SEPERATOR='%F{239}'
+
+C1OFFSET=7
+C2OFFSET=7
 C3OFFSET=6
 C4OFFSET=7
 C5OFFSET=6
 C6OFFSET=6
 C7OFFSET=6
+C8OFFSET=7
 
 OFFSET=0
 
@@ -100,14 +110,15 @@ function preexec() {
 function show_git_branch() {
     BRANCH_NAME=$(git branch --show-current 2> /dev/null)
     if [ $? -eq 0 ]; then
-        echo -n " ${COLOR2}· ${COLOR1}[$BRANCH_NAME]"
+        echo -n " ${COLOR_SEPERATOR}· ${COLOR_SECODARY}[$BRANCH_NAME]"
     fi 
 }
 
 function show_git_status() {
     NUMBER_OF_CHANGES=$(git status --short 2> /dev/null | wc -l | tr -d " ")
     if [ $NUMBER_OF_CHANGES -ne "0" ]; then 
-        echo -n "${COLOR1}["
+        echo -n "${COLOR_SECODARY}["
+        ### Get Insertions and/or Deletions
         NUMBER_A=$(git diff --shortstat 2> /dev/null | cut -d' ' -f5)
         NUMBER_B=$(git diff --shortstat 2> /dev/null | cut -d' ' -f7)
         if [ -z "$NUMBER_B" ]; then
@@ -116,7 +127,7 @@ function show_git_status() {
             echo -n $(($NUMBER_A + $NUMBER_B))
         fi
         echo -n "]"
-        return $C1OFFSET
+        return $C7OFFSET
     else 
         return 0
     fi
@@ -127,9 +138,9 @@ function show_timer() {
     now=$(($(print -P %D{%s%6.})/1000))
     elapsed=$(($now-$timer))
     elapsed_2=$((elapsed/1000))
-    # echo " ${COLOR2}· ${COLOR1}${elapsed_2}. sec"
+    # echo " ${COLOR_SEPERATOR}· ${COLOR_BORDER}${elapsed_2}. sec"
     seconds_with_decimals=$(echo $elapsed|awk '{printf "%.2f",$0/1000}')
-    echo " ${COLOR2}· ${COLOR1}${seconds_with_decimals}sec"
+    echo " ${COLOR_SEPERATOR}· ${COLOR_SECODARY}${seconds_with_decimals}sec"
     unset timer
     return $(($C1OFFSET+$C2OFFSET))
   else
@@ -141,15 +152,15 @@ function show_timer() {
 function show_date_time() {
     AM_PM=$(date +%p) 
     if [[ $AM_PM == "PM" ]]; then
-        date +%-I:%Mpm
+        date +%-I:%Mp
     else 
-        date +%-I:%Mam
+        date +%-I:%Ma
     fi 
 }
 
 function show_python_venv() {
     if [ -n "$VIRTUAL_ENV" ]; then 
-        echo -n " ${COLOR2}· ${maroon}VENV"
+        echo -n " ${COLOR_SEPERATOR}· ${COLOR_SEPERATOR}VENV"
     fi
 }
 
@@ -161,41 +172,43 @@ function short_prompt() {
 function precmd() {
     OFFSET=0
 
-    PROMPT_LINE="%B${COLOR1}╒$(printf '═%.0s' {2..$(tput cols)})${NEWLINE}"
+    PROMPT_LINE="" 
+    PROMPT_LINE="%B${COLOR_BORDER}╒$(printf '═%.0s' {2..$(tput cols)})${NEWLINE}"
 
     # The offset is adjusted based off the return value from the funciton calls
     PROMPT=""
     PROMPT="%B"
-    OFFSET=$(($OFFSET+2))
-    # PROMPT="${PROMPT}${COLOR7}"
+    # OFFSET=$(($OFFSET+2))
+    # PROMPT="${PROMPT}${COLOR_SEPERATOR}"
     # OFFSET=$(($OFFSET+$C7OFFSET))
-    PROMPT="${PROMPT}├ "
-    PROMPT="${PROMPT}${COLOR7}"
-    OFFSET=$(($OFFSET+$C7OFFSET))
-    PROMPT="${PROMPT}nexus:$(dirs)"
-#     PROMPT="${PROMPT} ${COLOR2}· ${COLOR1}$(show_date_time)"
-#     PROMPT="${PROMPT}$(show_git_branch)"
+    # PROMPT="${PROMPT}├── "
+    # PROMPT="${PROMPT}├ "
+    PROMPT="${PROMPT}└ "
+    PROMPT="${PROMPT}${COLOR_PRIMARY}"
+    # OFFSET=$(($OFFSET+$C7OFFSET))
+    PROMPT="${PROMPT}nexus:%~"
+    # PROMPT="${PROMPT}nexus:$(dirs)"
+    PROMPT="${PROMPT} ${COLOR_SEPERATOR}· ${COLOR_SECODARY}$(show_date_time)"
+    PROMPT="${PROMPT}$(show_git_branch)"
 #     OFFSET=$(($OFFSET+$?))
-#     PROMPT="${PROMPT}$(show_git_status)"
+    PROMPT="${PROMPT}$(show_git_status)"
 #     OFFSET=$(($OFFSET+$?))
-#     PROMPT="${PROMPT}%(?. ${COLOR2}· ${COLOR3}OK. ${COLOR2}· ${COLOR4}Error: %?)"
-#     PROMPT="${PROMPT}$(show_python_venv)"
-#     PROMPT="${PROMPT}$(show_timer)"
+    PROMPT="${PROMPT}%(?. ${COLOR_SEPERATOR}· ${COLOR_SECODARY}OK. ${COLOR_SEPERATOR}· ${COLOR4}Error: %?)"
+    PROMPT="${PROMPT}$(show_python_venv)"
+    PROMPT="${PROMPT}$(show_timer)"
 #     OFFSET=$(($OFFSET+$?))
-
-    PROMPT="${PROMPT} "
-
-    # PROMPT="${PROMPT}${COLOR1} "
+    # PROMPT="${PROMPT} "
+    # PROMPT="${PROMPT}${COLOR_BORDER} "
     # OFFSET=$(($OFFSET+$C1OFFSET))
 
     # COUNTER=$(( ${#PROMPT} - $OFFSET + 1))
     # COUNTER=$(( $(tput cols) - ${#PROMPT} - $OFFSET + 1))
-    COUNTER=$(( $(tput cols) - ${#PROMPT} + $OFFSET ))
+    
+    # COUNTER=$(( $(tput cols) - ${#PROMPT} + $OFFSET ))
+    # PROMPT="${PROMPT}$(printf '─%.0s' {1..$COUNTER})"
 
-
-    PROMPT="${PROMPT}$(printf '─%.0s' {1..$COUNTER})"
     # PROMPT="${PROMPT}${COUNTER}"
-#     PROMPT="${PROMPT}${COLOR2}"
+#     PROMPT="${PROMPT}${COLOR_SEPERATOR}"
 #     while [ $COUNTER -le $(tput cols) ]
 #     do
 #         PROMPT="${PROMPT}─"
@@ -206,11 +219,13 @@ function precmd() {
     # PROMPT="${PROMPT} - ${COUNTER}"
 
     PROMPT="${PROMPT}${NEWLINE}"
-    PROMPT="${PROMPT}${COLOR1}"
-    PROMPT="${PROMPT}└ "
+    PROMPT="${PROMPT}${COLOR_BORDER}"
+    # PROMPT="${PROMPT}└ "
     PROMPT="${PROMPT}%f"
-    PROMPT="${PROMPT}%b"
+    PROMPT="${PROMPT}${COLOR_PROMPT}"
     PROMPT="${PROMPT}%(!.#.$) "
+    PROMPT="${PROMPT}%b"
+    PROMPT="${PROMPT}%f"
 
     PROMPT="${PROMPT_LINE}${PROMPT}"
 
@@ -218,22 +233,22 @@ function precmd() {
 
     if [ $(tput cols) -le 50 ]; then
         PROMPT="%B"
-        PROMPT="${PROMPT}${COLOR2}"
+        PROMPT="${PROMPT}${COLOR_SEPERATOR}"
         PROMPT="${PROMPT}┌─ "
-        PROMPT="${PROMPT}${COLOR1}"
+        PROMPT="${PROMPT}${COLOR_BORDER}"
         PROMPT="${PROMPT}%~"
         # PROMPT="${PROMPT}$(short_prompt)"
         # PROMPT="${PROMPT}$(show_git_branch)"
         # PROMPT="${PROMPT}$(show_git_status)"
-        # PROMPT="${PROMPT}%(?. ${COLOR2}· ${COLOR3}OK. ${COLOR2}· ${COLOR4}Error: %?)"
+        # PROMPT="${PROMPT}%(?. ${COLOR_SEPERATOR}· ${COLOR3}OK. ${COLOR_SEPERATOR}· ${COLOR4}Error: %?)"
         # PROMPT="${PROMPT}$(show_python_venv)"
         # PROMPT="${PROMPT}$(show_timer)"
         # OFFSET=$(($OFFSET+$?))
         PROMPT="${PROMPT}${NEWLINE}"
-        PROMPT="${PROMPT}${COLOR2}"
+        PROMPT="${PROMPT}${COLOR_PROMPT}"
         # PROMPT="${PROMPT}└ "
-        PROMPT="${PROMPT}%f"
         PROMPT="${PROMPT}%(!.#.$) "
+        PROMPT="${PROMPT}%f"
         PROMPT="${PROMPT}%b"
     fi
 
