@@ -82,8 +82,8 @@ COLOR4='%F{160}'
 
 C1OFFSET=6
 C2OFFSET=5
-C2OFFSET=6
-C2OFFSET=7
+C3OFFSET=6
+C4OFFSET=7
 
 OFFSET=0
 
@@ -110,6 +110,9 @@ function show_git_status() {
             echo -n $(($NUMBER_A + $NUMBER_B))
         fi
         echo -n "]"
+        return $C1OFFSET
+    else 
+        return 0
     fi
 }
 
@@ -150,27 +153,37 @@ function short_prompt() {
 }
 
 function precmd() {
-    OFFSET=58
+    OFFSET=0
 
+    # The offset is adjusted based off the return value from the funciton calls
+    PROMPT=""
     PROMPT="%B"
+    OFFSET=$(($OFFSET+2))
     PROMPT="${PROMPT}${COLOR2}"
+    OFFSET=$(($OFFSET+$C2OFFSET))
     PROMPT="${PROMPT}┌── "
     PROMPT="${PROMPT}${COLOR1}"
-    PROMPT="${PROMPT}nexus:%~"
-    PROMPT="${PROMPT} ${COLOR2}· ${COLOR1}$(show_date_time)"
-    PROMPT="${PROMPT}$(show_git_branch)"
-    PROMPT="${PROMPT}$(show_git_status)"
-    PROMPT="${PROMPT}%(?. ${COLOR2}· ${COLOR3}OK. ${COLOR2}· ${COLOR4}Error: %?)"
-    PROMPT="${PROMPT}$(show_python_venv)"
-    PROMPT="${PROMPT}$(show_timer)"
-    OFFSET=$(($OFFSET+$?))
+    OFFSET=$(($OFFSET+$C1OFFSET))
+    # PROMPT="${PROMPT}nexus:%~"
+    PROMPT="${PROMPT}nexus:$(dirs)"
+#     PROMPT="${PROMPT} ${COLOR2}· ${COLOR1}$(show_date_time)"
+#     PROMPT="${PROMPT}$(show_git_branch)"
+#     OFFSET=$(($OFFSET+$?))
+#     PROMPT="${PROMPT}$(show_git_status)"
+#     OFFSET=$(($OFFSET+$?))
+#     PROMPT="${PROMPT}%(?. ${COLOR2}· ${COLOR3}OK. ${COLOR2}· ${COLOR4}Error: %?)"
+#     PROMPT="${PROMPT}$(show_python_venv)"
+#     PROMPT="${PROMPT}$(show_timer)"
+#     OFFSET=$(($OFFSET+$?))
+
     PROMPT="${PROMPT} "
 
-    COUNTER=$(( ${#PROMPT} - $OFFSET ))
+    COUNTER=$(( ${#PROMPT} - $OFFSET + 1))
 
+    PROMPT="${PROMPT}${COLOR2}"
     while [ $COUNTER -le $(tput cols) ]
     do
-        PROMPT="${PROMPT}${COLOR2}─"
+        PROMPT="${PROMPT}─"
         COUNTER=$[$COUNTER+1]
     done
 
