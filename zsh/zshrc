@@ -89,7 +89,8 @@ COLOR8='%F{130}'
 COLOR_PROMPT='%F{15}'
 COLOR_BORDER='%F{88}'
 COLOR_PRIMARY='%F{246}'
-COLOR_SECODARY='%F{239}'
+COLOR_SECODARY='%F{241}'
+COLOR_TERTIARY='%F{241}'
 COLOR_SEPERATOR='%F{239}'
 
 C1OFFSET=7
@@ -110,14 +111,14 @@ function preexec() {
 function show_git_branch() {
     BRANCH_NAME=$(git branch --show-current 2> /dev/null)
     if [ $? -eq 0 ]; then
-        echo -n " ${COLOR_SEPERATOR}· ${COLOR_SECODARY}[$BRANCH_NAME]"
+        echo -n " ${COLOR_SEPERATOR}· ${COLOR_TERTIARY}[$BRANCH_NAME]"
     fi 
 }
 
 function show_git_status() {
     NUMBER_OF_CHANGES=$(git status --short 2> /dev/null | wc -l | tr -d " ")
     if [ $NUMBER_OF_CHANGES -ne "0" ]; then 
-        echo -n "${COLOR_SECODARY}["
+        echo -n "${COLOR_TERTIARY}["
         ### Get Insertions and/or Deletions
         NUMBER_A=$(git diff --shortstat 2> /dev/null | cut -d' ' -f5)
         NUMBER_B=$(git diff --shortstat 2> /dev/null | cut -d' ' -f7)
