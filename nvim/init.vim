@@ -3,6 +3,7 @@ call plug#begin("~/.vim/plugged")
     Plug 'tpope/vim-commentary'
     Plug 'nvim-lua/popup.nvim'
     Plug 'nvim-lua/plenary.nvim'
+    Plug 'norcalli/nvim-terminal.lua'
     Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
     " Plug 'vimwiki/vimwiki'
@@ -19,17 +20,30 @@ call plug#begin("~/.vim/plugged")
     Plug 'godlygeek/tabular'
     Plug 'plasticboy/vim-markdown'
     Plug 'theHamsta/nvim_rocks', {'do': 'pip3 install --user hererocks && python3 -mhererocks . -j2.1.0-beta3 -r3.0.0 && cp nvim_rocks.lua lua'}
+
+    " Themes
+    Plug 'danilo-augusto/vim-afterglow'
+
 call plug#end()
 
 " Disable plasticboy/vim-markdown folding
 let g:vim_markdown_folding_disabled = 1
 
+
+" For colors in terminal 
+lua require('terminal').setup()
+
 " Config
 if (has("termguicolors"))
  set termguicolors
 endif
+
+" let g:afterglow_inherit_background=1 
+
 syntax enable
-colorscheme dracula
+" colorscheme dracula
+colorscheme afterglow
+
 
 
 set nu
@@ -81,6 +95,11 @@ require('plugins')
 
 local nvim_rocks = require'nvim_rocks'
 nvim_rocks.ensure_installed('lua-cjson')
+-- nvim_rocks.ensure_installed('busted')
+-- nvim_rocks.ensure_installed('lua-term')
+
+
+
 -- nvim_rocks.remove('lua-cjson')
 
 

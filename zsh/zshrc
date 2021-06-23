@@ -1,4 +1,10 @@
 ######################################################################
+# Exports 
+
+export TERM=screen-256color
+
+
+######################################################################
 # Alias style functions 
 
 function rc () {
@@ -11,10 +17,6 @@ function e () {
 
 # These aren't great since they only deal with 
 # one argument. 
-
-function mr () {
-    rm "$1"
-}
 
 function n () {
 	nvim $1
@@ -78,6 +80,13 @@ COLOR2='%F{8}'
 COLOR3='%F{22}'
 COLOR4='%F{160}'
 
+C1OFFSET=6
+C2OFFSET=5
+C2OFFSET=6
+C2OFFSET=7
+
+OFFSET=0
+
 function preexec() {
     timer=$(($(print -P %D{%s%6.})/1000))
 }
@@ -113,7 +122,11 @@ function show_timer() {
     seconds_with_decimals=$(echo $elapsed|awk '{printf "%.2f",$0/1000}')
     echo " ${COLOR2}· ${COLOR1}${seconds_with_decimals}sec"
     unset timer
+    return $(($C1OFFSET+$C2OFFSET))
+  else
+    return 0
   fi
+
 }
 
 function show_date_time() {
@@ -132,6 +145,8 @@ function show_python_venv() {
 }
 
 function precmd() {
+    OFFSET=58
+
     PROMPT="%B"
     PROMPT="${PROMPT}${COLOR2}"
     PROMPT="${PROMPT}┌── "
@@ -143,6 +158,21 @@ function precmd() {
     PROMPT="${PROMPT}%(?. ${COLOR2}· ${COLOR3}OK. ${COLOR2}· ${COLOR4}Error: %?)"
     PROMPT="${PROMPT}$(show_python_venv)"
     PROMPT="${PROMPT}$(show_timer)"
+    OFFSET=$(($OFFSET+$?))
+    PROMPT="${PROMPT} "
+
+    COUNTER=$(( ${#PROMPT} - $OFFSET ))
+
+    while [ $COUNTER -le $(tput cols) ]
+    do
+        PROMPT="${PROMPT}${COLOR2}─"
+        COUNTER=$[$COUNTER+1]
+    done
+
+    # PROMPT="${PROMPT}-${#PROMPT}-$(tput cols)"
+    #
+    # PROMPT="${PROMPT} - ${COUNTER}"
+
     PROMPT="${PROMPT}${NEWLINE}"
     PROMPT="${PROMPT}${COLOR2}"
     PROMPT="${PROMPT}└ "
@@ -150,5 +180,4 @@ function precmd() {
     PROMPT="${PROMPT}%(!.#.$) "
     PROMPT="${PROMPT}%b"
 }
-
 
