@@ -76,14 +76,19 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 
 NEWLINE=$'\n'
 COLOR1='%F{33}'
+COLOR1='%F{32}'
 COLOR2='%F{8}'
 COLOR3='%F{22}'
 COLOR4='%F{160}'
+COLOR5='%F{20}'
+COLOR6='%F{33}'
 
 C1OFFSET=6
 C2OFFSET=5
 C3OFFSET=6
 C4OFFSET=7
+C5OFFSET=6
+C6OFFSET=6
 
 OFFSET=0
 
@@ -159,11 +164,11 @@ function precmd() {
     PROMPT=""
     PROMPT="%B"
     OFFSET=$(($OFFSET+2))
-    PROMPT="${PROMPT}${COLOR2}"
-    OFFSET=$(($OFFSET+$C2OFFSET))
-    PROMPT="${PROMPT}┌── "
     PROMPT="${PROMPT}${COLOR1}"
     OFFSET=$(($OFFSET+$C1OFFSET))
+    PROMPT="${PROMPT}┌── "
+    PROMPT="${PROMPT}${COLOR6}"
+    OFFSET=$(($OFFSET+$C5OFFSET))
     # PROMPT="${PROMPT}nexus:%~"
     PROMPT="${PROMPT}nexus:$(dirs)"
 #     PROMPT="${PROMPT} ${COLOR2}· ${COLOR1}$(show_date_time)"
@@ -176,23 +181,28 @@ function precmd() {
 #     PROMPT="${PROMPT}$(show_timer)"
 #     OFFSET=$(($OFFSET+$?))
 
-    PROMPT="${PROMPT} "
+    PROMPT="${PROMPT}${COLOR1} "
+    OFFSET=$(($OFFSET+$C1OFFSET))
 
-    COUNTER=$(( ${#PROMPT} - $OFFSET + 1))
+    # COUNTER=$(( ${#PROMPT} - $OFFSET + 1))
+    # COUNTER=$(( $(tput cols) - ${#PROMPT} - $OFFSET + 1))
+    COUNTER=$(( $(tput cols) - ${#PROMPT} + $OFFSET ))
 
-    PROMPT="${PROMPT}${COLOR2}"
-    while [ $COUNTER -le $(tput cols) ]
-    do
-        PROMPT="${PROMPT}─"
-        COUNTER=$[$COUNTER+1]
-    done
 
+    PROMPT="${PROMPT}$(printf '─%.0s' {1..$COUNTER})"
+    # PROMPT="${PROMPT}${COUNTER}"
+#     PROMPT="${PROMPT}${COLOR2}"
+#     while [ $COUNTER -le $(tput cols) ]
+#     do
+#         PROMPT="${PROMPT}─"
+#         COUNTER=$[$COUNTER+1]
+#     done
     # PROMPT="${PROMPT}-${#PROMPT}-$(tput cols)"
     #
     # PROMPT="${PROMPT} - ${COUNTER}"
 
     PROMPT="${PROMPT}${NEWLINE}"
-    PROMPT="${PROMPT}${COLOR2}"
+    PROMPT="${PROMPT}${COLOR1}"
     PROMPT="${PROMPT}└ "
     PROMPT="${PROMPT}%f"
     PROMPT="${PROMPT}%(!.#.$) "
