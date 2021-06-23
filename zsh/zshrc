@@ -144,6 +144,11 @@ function show_python_venv() {
     fi
 }
 
+
+function short_prompt() {
+        echo $PWD | awk -F/ '{ for (i=2;i<NF;i++) { prompt=sprintf ("%s/%.1s", prompt, $i) } prompt=sprintf("%s/%s", prompt, $NF) } END { print prompt }'
+}
+
 function precmd() {
     OFFSET=58
 
@@ -179,5 +184,29 @@ function precmd() {
     PROMPT="${PROMPT}%f"
     PROMPT="${PROMPT}%(!.#.$) "
     PROMPT="${PROMPT}%b"
+
+
+
+    if [ $(tput cols) -le 50 ]; then
+        PROMPT="%B"
+        PROMPT="${PROMPT}${COLOR2}"
+        PROMPT="${PROMPT}┌─ "
+        PROMPT="${PROMPT}${COLOR1}"
+        PROMPT="${PROMPT}%~"
+        # PROMPT="${PROMPT}$(short_prompt)"
+        # PROMPT="${PROMPT}$(show_git_branch)"
+        # PROMPT="${PROMPT}$(show_git_status)"
+        # PROMPT="${PROMPT}%(?. ${COLOR2}· ${COLOR3}OK. ${COLOR2}· ${COLOR4}Error: %?)"
+        # PROMPT="${PROMPT}$(show_python_venv)"
+        # PROMPT="${PROMPT}$(show_timer)"
+        # OFFSET=$(($OFFSET+$?))
+        PROMPT="${PROMPT}${NEWLINE}"
+        PROMPT="${PROMPT}${COLOR2}"
+        # PROMPT="${PROMPT}└ "
+        PROMPT="${PROMPT}%f"
+        PROMPT="${PROMPT}%(!.#.$) "
+        PROMPT="${PROMPT}%b"
+    fi
+
 }
 
