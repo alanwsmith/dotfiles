@@ -1,4 +1,4 @@
-######################################################################
+#'#####################################################################
 # Exports 
 
 export TERM=screen-256color
@@ -87,12 +87,15 @@ COLOR6='%F{33}'
 COLOR8='%F{130}'
 
 COLOR_PROMPT='%F{15}'
-COLOR_BORDER='%F{335}'
-COLOR_PRIMARY='%F{246}'
+COLOR_BORDER='%F{248}'
+COLOR_BORDER='%F{88}'
+COLOR_PRIMARY='%F{248}'
+COLOR_PRIMARY='%F{15}'
 COLOR_SECONDARY='%F{241}'
 COLOR_TERTIARY='%F{241}'
 COLOR_SEPERATOR='%F{239}'
 
+OFFSET_BORDER="${#COLOR_BORDER}"
 OFFSET_PRIMARY="${#COLOR_PRIMARY}"
 OFFSET_SECONDARY="${#COLOR_SECONDARY}"
 OFFSET_SEPERATOR="${#COLOR_SEPERATOR}"
@@ -203,6 +206,8 @@ function precmd() {
     OFFSET=$(($OFFSET+$OFFSET_SEPERATOR+$OFFSET_SECONDARY))
     # PROMPT="${PROMPT}${OFFSET}"
 
+    PROMPT="${PROMPT}"
+
     PROMPT="${PROMPT}$(show_git_branch)"
     OFFSET=$(($OFFSET+$?))
     PROMPT="${PROMPT}$(show_git_status)"
@@ -213,8 +218,8 @@ function precmd() {
     # TODO: Get an offset for this
     # PROMPT="${PROMPT}$(show_python_venv)"
 
-#     PROMPT="${PROMPT}$(show_timer)"
-#     OFFSET=$(($OFFSET+$?))
+    PROMPT="${PROMPT}$(show_timer)"
+    OFFSET=$(($OFFSET+$?))
 
     # PROMPT="${PROMPT} "
     # PROMPT="${PROMPT}${COLOR_BORDER} "
@@ -225,7 +230,9 @@ function precmd() {
     
     # COUNTER=$(( $(tput cols) - ${#PROMPT} + $OFFSET ))
     COUNTER=$(( ${#PROMPT} - $OFFSET ))
-    PROMPT_LINE="┌$(printf '─%.0s' {2..$COUNTER})"
+    PROMPT_LINE="${COLOR_BORDER}"
+#     PROMPT_LINE="${PROMPT_LINE}┌$(printf '─%.0s' {2..$COUNTER})"
+    PROMPT_LINE="${PROMPT_LINE}╒$(printf '═%.0s' {2..$COUNTER})"
     PROMPT_LINE="${PROMPT_LINE}${NEWLINE}"
 
     # PROMPT="${PROMPT}${COUNTER}"
