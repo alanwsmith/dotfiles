@@ -172,7 +172,10 @@ function show_date_time() {
 
 function show_python_venv() {
     if [ -n "$VIRTUAL_ENV" ]; then 
-        echo -n " ${COLOR_SEPERATOR}· ${COLOR_SEPERATOR}VENV"
+        echo -n " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}VENV"
+        return $(( $OFFSET_SEPERATOR + $OFFSET_SECONDARY ))
+    else
+        return 0
     fi
 }
 
@@ -216,7 +219,8 @@ function precmd() {
 #     OFFSET=$(($OFFSET+${OFFSET_SEPERATOR}+${OFFSET_SECONDARY}))
 
     # TODO: Get an offset for this
-    # PROMPT="${PROMPT}$(show_python_venv)"
+    PROMPT="${PROMPT}$(show_python_venv)"
+    OFFSET=$(($OFFSET+$?))
 
     PROMPT="${PROMPT}$(show_timer)"
     OFFSET=$(($OFFSET+$?))
