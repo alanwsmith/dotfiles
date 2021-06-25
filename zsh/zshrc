@@ -68,7 +68,7 @@ setopt CDABLE_VARS
 
 # Set colors for ls
 export CLICOLOR=1
-export LSCOLORS=GxFxCxDxBxegedabagaced
+export LS_COLORS='di=1:fi=34:ln=31:pi=5:so=5:bd=5:cd=5:or=31'
 
 
 ######################################################################
@@ -89,8 +89,7 @@ COLOR8='%F{130}'
 COLOR_PROMPT='%F{15}'
 COLOR_BORDER='%F{248}'
 COLOR_BORDER='%F{88}'
-COLOR_PRIMARY='%F{248}'
-COLOR_PRIMARY='%F{15}'
+COLOR_PRIMARY='%F{253}'
 COLOR_SECONDARY='%F{241}'
 COLOR_TERTIARY='%F{241}'
 COLOR_SEPERATOR='%F{239}'
@@ -189,8 +188,7 @@ function short_prompt() {
 function precmd() {
     OFFSET=0
 
-    PROMPT_LINE="" 
-    PROMPT_LINE="%B${COLOR_BORDER}╒$(printf '═%.0s' {2..$(tput cols)})${NEWLINE}"
+    PROMPT_LINE="${NEWLINE}${NEWLINE}%B${COLOR_BORDER}╒$(printf '═%.0s' {2..$(tput cols)})${NEWLINE}"
 
     # The offset is adjusted based off the return value from the funciton calls
     PROMPT=""
@@ -200,7 +198,7 @@ function precmd() {
     # OFFSET=$(($OFFSET+$C7OFFSET))
     # PROMPT="${PROMPT}├── "
     # PROMPT="${PROMPT}├ "
-    PROMPT="${PROMPT}└ "
+    PROMPT="${PROMPT}├ "
     PROMPT="${PROMPT}${COLOR_PRIMARY}"
     OFFSET=$(($OFFSET+$OFFSET_PRIMARY))
     # PROMPT="${PROMPT}nexus:%~"
@@ -240,7 +238,7 @@ function precmd() {
     COUNTER=$(( ${#PROMPT} - $OFFSET ))
     PROMPT_LINE="${COLOR_BORDER}"
 #     PROMPT_LINE="${PROMPT_LINE}┌$(printf '─%.0s' {2..$COUNTER})"
-    PROMPT_LINE="${PROMPT_LINE}╒$(printf '═%.0s' {2..$COUNTER})"
+    PROMPT_LINE="${PROMPT_LINE}$(printf '═%.0s' {2..$COUNTER})"
     PROMPT_LINE="${PROMPT_LINE}${NEWLINE}"
 
     # PROMPT="${PROMPT}${COUNTER}"
@@ -257,13 +255,15 @@ function precmd() {
     PROMPT="${PROMPT}${NEWLINE}"
     PROMPT="${PROMPT}${COLOR_BORDER}"
     # PROMPT="${PROMPT}└ "
-    PROMPT="${PROMPT}%f"
-    PROMPT="${PROMPT}${COLOR_PROMPT}"
-    PROMPT="${PROMPT}%(!.#.$) "
-    PROMPT="${PROMPT}%b"
-    PROMPT="${PROMPT}%f"
+    PROMPT="${PROMPT}${COLOR_BORDER}"
+    # PROMPT="${PROMPT}%(!.#.└) "
 
-    PROMPT="${PROMPT_LINE}${PROMPT}"
+
+    PROMPT="${NEWLINE}${COLOR_BORDER}╒${PROMPT_LINE}${PROMPT}"
+    PROMPT="${PROMPT}${COLOR_BORDER}╘${PROMPT_LINE}"
+    PROMPT="${PROMPT}%f"
+    PROMPT="${PROMPT}%(!.#.$) "
+    PROMPT="${PROMPT}%f"
 
 
 
