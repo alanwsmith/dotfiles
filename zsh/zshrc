@@ -162,14 +162,6 @@ function show_timer() {
 
 }
 
-function show_date_time() {
-    AM_PM=$(date +%p) 
-    if [[ $AM_PM == "PM" ]]; then
-        date +%-I:%Mp
-    else 
-        date +%-I:%Ma
-    fi 
-}
 
 function show_python_venv() {
     if [ -n "$VIRTUAL_ENV" ]; then 
@@ -187,8 +179,24 @@ function short_prompt() {
 
 
 function prompt_directory() {
-    echo "${COLOR_PRIMARY}nexus:$(dirs)"
+    echo -n "${COLOR_PRIMARY}nexus:$(dirs)"
     return ${OFFSET_PRIMARY}
+}
+
+function prompt_seperator() {
+    # echo -n " · "
+    echo -n " ${COLOR_SEPERATOR}· "
+    return $OFFSET_SEPERATOR
+}
+
+function prompt_clock() {
+    AM_PM=$(date +%p) 
+    if [[ $AM_PM == "PM" ]]; then
+        date +%-I:%Mp
+    else 
+        date +%-I:%Ma
+    fi 
+    return 0
 }
 
 function precmd() {
@@ -199,14 +207,28 @@ function precmd() {
     D_DIRECTORY=$(prompt_directory)
     O_DIRECTORY=$?
 
+    D_SEPERATOR=$(prompt_seperator)
+    O_SEPERATOR=$?
+
+    D_CLOCK=$(prompt_clock)
+    O_CLOCK=$?
+
 
     D="│ "
-    O=""
+    O=0
 
     D="${D}${D_DIRECTORY}"
-    O="${O}${O_DIRECTORY}"
+    O="$(( $O + ${O_DIRECTORY} ))"
 
-    
+    D="${D}${D_SEPERATOR}"
+    O="$(( $O + ${O_SEPERATOR} ))"
+
+    D="${D}${D_CLOCK}"
+    O="$(( $O + ${O_CLOCK} ))"
+
+    D="${D}${D_SEPERATOR}"
+    O="$(( $O + ${O_SEPERATOR} ))"
+
 
     FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} ))
     D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}│"
@@ -218,6 +240,8 @@ function precmd() {
     P="${P}${D}"
     P="${P}${NEWLINE}"
     P="${P}${BOTTOM_LINE}"
+    # P="${P}${NEWLINE}"
+    # P="${P}${O}"
     P="${P}${NEWLINE}"
     PROMPT="${P}%f%b$ "
 
