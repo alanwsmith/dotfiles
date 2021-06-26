@@ -1,4 +1,4 @@
-#'#####################################################################
+#####################################################################
 # Exports 
 
 export TERM=screen-256color
@@ -185,108 +185,160 @@ function short_prompt() {
         echo $PWD | awk -F/ '{ for (i=2;i<NF;i++) { prompt=sprintf ("%s/%.1s", prompt, $i) } prompt=sprintf("%s/%s", prompt, $NF) } END { print prompt }'
 }
 
-function precmd() {
-    OFFSET=0
 
-    PROMPT_LINE="${NEWLINE}${NEWLINE}%B${COLOR_BORDER}╒$(printf '═%.0s' {2..$(tput cols)})${NEWLINE}"
+function prompt_directory() {
+    echo "${COLOR_PRIMARY}nexus:$(dirs)"
+    return ${OFFSET_PRIMARY}
+}
+
+function precmd() {
+
+    TOP_LINE="${COLOR_BORDER}╭$(printf '─%.0s' {3..$(tput cols)})╮"
+    BOTTOM_LINE="${COLOR_BORDER}╰$(printf '─%.0s' {3..$(tput cols)})╯"
+
+    D_DIRECTORY=$(prompt_directory)
+    O_DIRECTORY=$?
+
+
+    D="│ "
+    O=""
+
+    D="${D}${D_DIRECTORY}"
+    O="${O}${O_DIRECTORY}"
+
+    
+
+    FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} ))
+    D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}│"
+
+
+    P=""
+    P="${P}${TOP_LINE}"
+    P="${P}${NEWLINE}"
+    P="${P}${D}"
+    P="${P}${NEWLINE}"
+    P="${P}${BOTTOM_LINE}"
+    P="${P}${NEWLINE}"
+    PROMPT="${P}%f%b$ "
+
+
+    # PROMPT_LINE="${NEWLINE}${NEWLINE}%B${COLOR_BORDER}╒$(printf '═%.0s' {2..$(tput cols)})${NEWLINE}"
 
     # The offset is adjusted based off the return value from the funciton calls
-    PROMPT=""
-    PROMPT="%B"
-    OFFSET=$(($OFFSET+2))
+    # PROMPT=""
+    # PROMPT="%B"
+    # OFFSET=$(($OFFSET+2))
     # PROMPT="${PROMPT}${COLOR_SEPERATOR}"
     # OFFSET=$(($OFFSET+$C7OFFSET))
     # PROMPT="${PROMPT}├── "
     # PROMPT="${PROMPT}├ "
-    PROMPT="${PROMPT}├ "
-    PROMPT="${PROMPT}${COLOR_PRIMARY}"
-    OFFSET=$(($OFFSET+$OFFSET_PRIMARY))
-    # PROMPT="${PROMPT}nexus:%~"
-    PROMPT="${PROMPT}nexus:$(dirs)"
-    PROMPT="${PROMPT} ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}$(show_date_time)"
-
-    # PROMPT="${PROMPT}${OFFSET}"
-    OFFSET=$(($OFFSET+$OFFSET_SEPERATOR+$OFFSET_SECONDARY))
-    # PROMPT="${PROMPT}${OFFSET}"
-
-    PROMPT="${PROMPT}"
-
-    PROMPT="${PROMPT}$(show_git_branch)"
-    OFFSET=$(($OFFSET+$?))
-    PROMPT="${PROMPT}$(show_git_status)"
-    OFFSET=$(($OFFSET+$?))
-
-    # TODO: Get OK showing up again with the proper
-    # lenght header
-    # PROMPT="${PROMPT}%(?. ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}OK. ${COLOR_SEPERATOR}· ${COLOR4}Error: %?)"
-    # OFFSET=$(($OFFSET+${OFFSET_SEPERATOR}+${OFFSET_SECONDARY}))
-
-    PROMPT="${PROMPT}$(show_python_venv)"
-    OFFSET=$(($OFFSET+$?))
-
-    PROMPT="${PROMPT}$(show_timer)"
-    OFFSET=$(($OFFSET+$?))
-
-    # PROMPT="${PROMPT} "
-    # PROMPT="${PROMPT}${COLOR_BORDER} "
-    # OFFSET=$(($OFFSET+$C1OFFSET))
-
-    # COUNTER=$(( ${#PROMPT} - $OFFSET + 1))
-    # COUNTER=$(( $(tput cols) - ${#PROMPT} - $OFFSET + 1))
-    
-    # COUNTER=$(( $(tput cols) - ${#PROMPT} + $OFFSET ))
-    COUNTER=$(( ${#PROMPT} - $OFFSET ))
-    PROMPT_LINE="${COLOR_BORDER}"
-#     PROMPT_LINE="${PROMPT_LINE}┌$(printf '─%.0s' {2..$COUNTER})"
-    PROMPT_LINE="${PROMPT_LINE}$(printf '═%.0s' {2..$COUNTER})"
-    PROMPT_LINE="${PROMPT_LINE}${NEWLINE}"
-
-    # PROMPT="${PROMPT}${COUNTER}"
-#     PROMPT="${PROMPT}${COLOR_SEPERATOR}"
-#     while [ $COUNTER -le $(tput cols) ]
-#     do
-#         PROMPT="${PROMPT}─"
-#         COUNTER=$[$COUNTER+1]
-#     done
-    # PROMPT="${PROMPT}-${#PROMPT}-$(tput cols)"
-    #
-    # PROMPT="${PROMPT} - ${COUNTER}"
-
-    PROMPT="${PROMPT}${NEWLINE}"
-    PROMPT="${PROMPT}${COLOR_BORDER}"
-    # PROMPT="${PROMPT}└ "
-    PROMPT="${PROMPT}${COLOR_BORDER}"
-    # PROMPT="${PROMPT}%(!.#.└) "
-
-
-    PROMPT="${NEWLINE}${COLOR_BORDER}╒${PROMPT_LINE}${PROMPT}"
-    PROMPT="${PROMPT}${COLOR_BORDER}╘${PROMPT_LINE}"
-    PROMPT="${PROMPT}%f"
-    PROMPT="${PROMPT}%(!.#.$) "
-    PROMPT="${PROMPT}%f"
-
-
-
-    if [ $(tput cols) -le 50 ]; then
-        PROMPT="%B"
-        PROMPT="${PROMPT}${COLOR_SEPERATOR}"
-        PROMPT="${PROMPT}┌─ "
-        PROMPT="${PROMPT}${COLOR_BORDER}"
-        PROMPT="${PROMPT}%~"
-        # PROMPT="${PROMPT}$(short_prompt)"
-        # PROMPT="${PROMPT}$(show_git_branch)"
-        # PROMPT="${PROMPT}$(show_git_status)"
-        # PROMPT="${PROMPT}%(?. ${COLOR_SEPERATOR}· ${COLOR3}OK. ${COLOR_SEPERATOR}· ${COLOR4}Error: %?)"
-        # PROMPT="${PROMPT}$(show_python_venv)"
-        # PROMPT="${PROMPT}$(show_timer)"
-        # OFFSET=$(($OFFSET+$?))
-        PROMPT="${PROMPT}${NEWLINE}"
-        PROMPT="${PROMPT}${COLOR_PROMPT}"
-        # PROMPT="${PROMPT}└ "
-        PROMPT="${PROMPT}%(!.#.$) "
-        PROMPT="${PROMPT}%f"
-        PROMPT="${PROMPT}%b"
-    fi
+    # PROMPT="${PROMPT}├ "
+#     #
+#     PROMPT="${PROMPT}│ "
+#     PROMPT="${PROMPT}${COLOR_PRIMARY}"
+#     OFFSET=$(($OFFSET+$OFFSET_PRIMARY))
+#     # PROMPT="${PROMPT}nexus:%~"
+#     PROMPT="${PROMPT}nexus:$(dirs)"
+#     PROMPT="${PROMPT} ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}$(show_date_time)"
+# 
+#     # PROMPT="${PROMPT}${OFFSET}"
+#     OFFSET=$(($OFFSET+$OFFSET_SEPERATOR+$OFFSET_SECONDARY))
+#     # PROMPT="${PROMPT}${OFFSET}"
+# 
+#     PROMPT="${PROMPT}"
+# 
+#     PROMPT="${PROMPT}$(show_git_branch)"
+#     OFFSET=$(($OFFSET+$?))
+#     PROMPT="${PROMPT}$(show_git_status)"
+#     OFFSET=$(($OFFSET+$?))
+# 
+#     # TODO: Get OK showing up again with the proper
+#     # lenght header
+#     # PROMPT="${PROMPT}%(?. ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}OK. ${COLOR_SEPERATOR}· ${COLOR4}Error: %?)"
+#     # OFFSET=$(($OFFSET+${OFFSET_SEPERATOR}+${OFFSET_SECONDARY}))
+# 
+#     PROMPT="${PROMPT}$(show_python_venv)"
+#     OFFSET=$(($OFFSET+$?))
+# 
+#     PROMPT="${PROMPT}$(show_timer)"
+#     OFFSET=$(($OFFSET+$?))
+# 
+#     # PROMPT="${PROMPT} "
+#     # PROMPT="${PROMPT}${COLOR_BORDER} "
+#     # OFFSET=$(($OFFSET+$C1OFFSET))
+# 
+#     # COUNTER=$(( ${#PROMPT} - $OFFSET + 1))
+#     # COUNTER=$(( $(tput cols) - ${#PROMPT} - $OFFSET + 1))
+#     
+#     # COUNTER=$(( $(tput cols) - ${#PROMPT} + $OFFSET ))
+#     COUNTER=$(( ${#PROMPT} - $OFFSET ))
+#     PROMPT_LINE="${COLOR_BORDER}"
+# #     PROMPT_LINE="${PROMPT_LINE}┌$(printf '─%.0s' {2..$COUNTER})"
+#     PROMPT_LINE="${PROMPT_LINE}$(printf '═%.0s' {2..$COUNTER})"
+#     PROMPT_LINE="${PROMPT_LINE}${NEWLINE}"
+# 
+#     # PROMPT="${PROMPT}${COUNTER}"
+# #     PROMPT="${PROMPT}${COLOR_SEPERATOR}"
+# #     while [ $COUNTER -le $(tput cols) ]
+# #     do
+# #         PROMPT="${PROMPT}─"
+# #         COUNTER=$[$COUNTER+1]
+# #     done
+#     # PROMPT="${PROMPT}-${#PROMPT}-$(tput cols)"
+#     #
+#     # PROMPT="${PROMPT} - ${COUNTER}"
+# 
+#     PROMPT="${PROMPT}${COLOR_BORDER}"
+#     # PROMPT="${PROMPT}└ "
+#     PROMPT="${PROMPT}${COLOR_BORDER}"
+#     # PROMPT="${PROMPT}%(!.#.└) "
+#     
+#     ###########
+#     # PROMPT_LINE2="${NEWLINE}%B${COLOR_BORDER}╒$(printf '═%.0s' {2..$(tput cols)})${NEWLINE}"
+#     PROMPT_LINE2="${NEWLINE}%B${COLOR_BORDER}╭$(printf '─%.0s' {3..$(tput cols)})╮${NEWLINE}"
+#     # PROMPT="${NEWLINE}${COLOR_BORDER}╒${PROMPT_LINE}${PROMPT}"
+#     #
+#     PROMPT="${PROMPT_LINE2}${PROMPT}"
+#     
+#     # REMAINDER=$(($(tput cols) - ${#PROMPT} - ${OFFSET}))
+# 
+#     PROMPT="${PROMPT}$(printf '═%.0s' {1..${REMAINDER}})"
+#     PROMPT="${PROMPT}${NEWLINE}${REMAINDER}"
+# 
+#     # PROMPT_LINE_FULL="$(printf '═%.0s' {2..$(tput cols)})${NEWLINE}"
+#     PROMPT_LINE_FULL="$(printf '─%.0s' {3..$(tput cols)})╯${NEWLINE}"
+#     PROMPT="${PROMPT}${COLOR_BORDER}╰${PROMPT_LINE_FULL}"
+#     ###########
+#     
+#     # PROMPT="${PROMPT}${COLOR_BORDER}└${PROMPT_LINE_FULL}"
+#     # PROMPT="${PROMPT}${COLOR_BORDER}╘${PROMPT_LINE_FULL}"
+#     # PROMPT="${PROMPT}${COLOR_BORDER}╘${PROMPT_LINE}"
+#     PROMPT="${PROMPT}%f"
+#     PROMPT="${PROMPT}%(!.#.$) "
+#     PROMPT="${PROMPT}%f"
+# 
+# 
+# 
+#     if [ $(tput cols) -le 50 ]; then
+#         PROMPT="%B"
+#         PROMPT="${PROMPT}${COLOR_SEPERATOR}"
+#         PROMPT="${PROMPT}┌─ "
+#         PROMPT="${PROMPT}${COLOR_BORDER}"
+#         PROMPT="${PROMPT}%~"
+#         # PROMPT="${PROMPT}$(short_prompt)"
+#         # PROMPT="${PROMPT}$(show_git_branch)"
+#         # PROMPT="${PROMPT}$(show_git_status)"
+#         # PROMPT="${PROMPT}%(?. ${COLOR_SEPERATOR}· ${COLOR3}OK. ${COLOR_SEPERATOR}· ${COLOR4}Error: %?)"
+#         # PROMPT="${PROMPT}$(show_python_venv)"
+#         # PROMPT="${PROMPT}$(show_timer)"
+#         # OFFSET=$(($OFFSET+$?))
+#         PROMPT="${PROMPT}${NEWLINE}"
+#         PROMPT="${PROMPT}${COLOR_PROMPT}"
+#         # PROMPT="${PROMPT}└ "
+#         PROMPT="${PROMPT}%(!.#.$) "
+#         PROMPT="${PROMPT}%f"
+#         PROMPT="${PROMPT}%b"
+#     fi
 
 }
 
