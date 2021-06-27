@@ -163,7 +163,7 @@ function show_timer() {
 
 }
 
-function show_python_venv() {
+function prompt_python_venv() {
     if [ -n "$VIRTUAL_ENV" ]; then 
         echo -n " ${COLOR_SEPERATOR}· ${COLOR_VENV}VENV"
         return $(( $OFFSET_SEPERATOR + $OFFSET_VENV ))
@@ -210,6 +210,9 @@ function precmd() {
     D_GIT_STATUS=$(prompt_git_status)
     O_GIT_STATUS=$?
 
+    D_VENV=$(prompt_python_venv)
+    O_VENV=$?
+
     D_TIMER=$(show_timer)
     O_TIMER=$?
 
@@ -227,6 +230,9 @@ function precmd() {
 
     D="${D}${D_GIT_STATUS}"
     O="$(( $O + ${O_GIT_STATUS} ))"
+
+    D="${D}${D_VENV}"
+    O="$(( $O + ${O_VENV} ))"
 
 
     FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
