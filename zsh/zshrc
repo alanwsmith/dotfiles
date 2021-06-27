@@ -117,7 +117,7 @@ function preexec() {
     timer=$(($(print -P %D{%s%6.})/1000))
 }
 
-function show_git_branch() {
+function prompt_git_branch() {
     BRANCH_NAME=$(git branch --show-current 2> /dev/null)
     if [ $? -eq 0 ]; then
         echo -n " ${COLOR_SEPERATOR}· ${COLOR_TERTIARY}[$BRANCH_NAME]"
@@ -127,7 +127,7 @@ function show_git_branch() {
     fi 
 }
 
-function show_git_status() {
+function prompt_git_status() {
     NUMBER_OF_CHANGES=$(git status --short 2> /dev/null | wc -l | tr -d " ")
     if [ $NUMBER_OF_CHANGES -ne "0" ]; then 
         echo -n "${COLOR_TERTIARY}["
@@ -162,7 +162,6 @@ function show_timer() {
 
 }
 
-
 function show_python_venv() {
     if [ -n "$VIRTUAL_ENV" ]; then 
         echo -n " ${COLOR_SEPERATOR}· ${COLOR_VENV}VENV"
@@ -172,31 +171,25 @@ function show_python_venv() {
     fi
 }
 
-
 function short_prompt() {
         echo $PWD | awk -F/ '{ for (i=2;i<NF;i++) { prompt=sprintf ("%s/%.1s", prompt, $i) } prompt=sprintf("%s/%s", prompt, $NF) } END { print prompt }'
 }
-
 
 function prompt_directory() {
     echo -n "${COLOR_PRIMARY}nexus:$(dirs)"
     return ${OFFSET_PRIMARY}
 }
 
-function prompt_seperator() {
-    # echo -n " · "
-    echo -n " ${COLOR_SEPERATOR}· "
-    return $OFFSET_SEPERATOR
-}
-
 function prompt_clock() {
     AM_PM=$(date +%p) 
     if [[ $AM_PM == "PM" ]]; then
+        echo -n " ${COLOR_SEPERATOR}· "
         date +%-I:%Mp
     else 
+        echo -n " ${COLOR_SEPERATOR}· "
         date +%-I:%Ma
     fi 
-    return 0
+    return $OFFSET_SEPERATOR
 }
 
 function precmd() {
@@ -207,12 +200,14 @@ function precmd() {
     D_DIRECTORY=$(prompt_directory)
     O_DIRECTORY=$?
 
-    D_SEPERATOR=$(prompt_seperator)
-    O_SEPERATOR=$?
-
     D_CLOCK=$(prompt_clock)
     O_CLOCK=$?
 
+    D_GIT_BRANCH=$(prompt_git_branch)
+    O_GIT_BRANCH=$?
+
+    D_GIT_STATUS=$(prompt_git_status)
+    O_GIT_STATUS=$?
 
     D="│ "
     O=0
@@ -220,19 +215,17 @@ function precmd() {
     D="${D}${D_DIRECTORY}"
     O="$(( $O + ${O_DIRECTORY} ))"
 
-    D="${D}${D_SEPERATOR}"
-    O="$(( $O + ${O_SEPERATOR} ))"
-
     D="${D}${D_CLOCK}"
     O="$(( $O + ${O_CLOCK} ))"
 
-    D="${D}${D_SEPERATOR}"
-    O="$(( $O + ${O_SEPERATOR} ))"
+    D="${D}${D_GIT_BRANCH}"
+    O="$(( $O + ${O_GIT_BRANCH} ))"
 
+    D="${D}${D_GIT_STATUS}"
+    O="$(( $O + ${O_GIT_STATUS} ))"
 
     FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} ))
     D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}│"
-
 
     P=""
     P="${P}${TOP_LINE}"
@@ -240,41 +233,15 @@ function precmd() {
     P="${P}${D}"
     P="${P}${NEWLINE}"
     P="${P}${BOTTOM_LINE}"
-    # P="${P}${NEWLINE}"
-    # P="${P}${O}"
     P="${P}${NEWLINE}"
     PROMPT="${P}%f%b$ "
 
 
     # PROMPT_LINE="${NEWLINE}${NEWLINE}%B${COLOR_BORDER}╒$(printf '═%.0s' {2..$(tput cols)})${NEWLINE}"
 
-    # The offset is adjusted based off the return value from the funciton calls
-    # PROMPT=""
-    # PROMPT="%B"
-    # OFFSET=$(($OFFSET+2))
-    # PROMPT="${PROMPT}${COLOR_SEPERATOR}"
-    # OFFSET=$(($OFFSET+$C7OFFSET))
-    # PROMPT="${PROMPT}├── "
-    # PROMPT="${PROMPT}├ "
-    # PROMPT="${PROMPT}├ "
-#     #
-#     PROMPT="${PROMPT}│ "
-#     PROMPT="${PROMPT}${COLOR_PRIMARY}"
-#     OFFSET=$(($OFFSET+$OFFSET_PRIMARY))
-#     # PROMPT="${PROMPT}nexus:%~"
-#     PROMPT="${PROMPT}nexus:$(dirs)"
-#     PROMPT="${PROMPT} ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}$(show_date_time)"
 # 
-#     # PROMPT="${PROMPT}${OFFSET}"
-#     OFFSET=$(($OFFSET+$OFFSET_SEPERATOR+$OFFSET_SECONDARY))
-#     # PROMPT="${PROMPT}${OFFSET}"
 # 
-#     PROMPT="${PROMPT}"
 # 
-#     PROMPT="${PROMPT}$(show_git_branch)"
-#     OFFSET=$(($OFFSET+$?))
-#     PROMPT="${PROMPT}$(show_git_status)"
-#     OFFSET=$(($OFFSET+$?))
 # 
 #     # TODO: Get OK showing up again with the proper
 #     # lenght header
