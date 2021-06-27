@@ -153,9 +153,10 @@ function show_timer() {
     elapsed_2=$((elapsed/1000))
     # echo " ${COLOR_SEPERATOR}· ${COLOR_BORDER}${elapsed_2}. sec"
     seconds_with_decimals=$(echo $elapsed|awk '{printf "%.2f",$0/1000}')
-    echo " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}${seconds_with_decimals}sec"
+    # echo " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}${seconds_with_decimals}sec"
+    echo "${COLOR_SECONDARY}${seconds_with_decimals}sec "
     unset timer
-    return $(($OFFSET_SEPERATOR+$OFFSET_SECONDARY))
+    return $OFFSET_SEPERATOR
   else
     return 0
   fi
@@ -209,6 +210,9 @@ function precmd() {
     D_GIT_STATUS=$(prompt_git_status)
     O_GIT_STATUS=$?
 
+    D_TIMER=$(show_timer)
+    O_TIMER=$?
+
     D="│ "
     O=0
 
@@ -224,8 +228,14 @@ function precmd() {
     D="${D}${D_GIT_STATUS}"
     O="$(( $O + ${O_GIT_STATUS} ))"
 
-    FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} ))
-    D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}│"
+
+    FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
+    D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
+    D="${D}$(show_timer)"
+    D="${D}${COLOR_BORDER}│"
+
+    # D="${D}- ${O_TIMER} - ${#D_TIMER}"
+    
 
     P=""
     P="${P}${TOP_LINE}"
