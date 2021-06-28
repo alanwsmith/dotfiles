@@ -3,7 +3,6 @@
 
 export TERM=screen-256color
 
-
 ######################################################################
 # Alias style functions 
 
@@ -193,26 +192,33 @@ function prompt_clock() {
     return $OFFSET_SEPERATOR
 }
 
+function prompt_previous_exit_code() {
+    if [[ $1 -eq 0 ]]; then
+        echo "OK"
+    else
+        echo "ERROR"
+    fi 
+}
+
 function precmd() {
+
+    PREVIOUS_EXIT_CODE=$?
 
     TOP_LINE="${COLOR_BORDER}╭$(printf '─%.0s' {3..$(tput cols)})╮"
     BOTTOM_LINE="${COLOR_BORDER}╰$(printf '─%.0s' {3..$(tput cols)})╯"
 
     D_DIRECTORY=$(prompt_directory)
     O_DIRECTORY=$?
-
     D_CLOCK=$(prompt_clock)
     O_CLOCK=$?
-
+    D_PREVIOUS_EXIT_STATUS=$(prompt_previous_exit_code $PREVIOUS_EXIT_CODE)
+    O_PREVIOUS_EXIT_STATUS=$?
     D_GIT_BRANCH=$(prompt_git_branch)
     O_GIT_BRANCH=$?
-
     D_GIT_STATUS=$(prompt_git_status)
     O_GIT_STATUS=$?
-
     D_VENV=$(prompt_python_venv)
     O_VENV=$?
-
     D_TIMER=$(show_timer)
     O_TIMER=$?
 
@@ -221,27 +227,29 @@ function precmd() {
 
     D="${D}${D_DIRECTORY}"
     O="$(( $O + ${O_DIRECTORY} ))"
-
     D="${D}${D_CLOCK}"
     O="$(( $O + ${O_CLOCK} ))"
-
     D="${D}${D_GIT_BRANCH}"
     O="$(( $O + ${O_GIT_BRANCH} ))"
-
     D="${D}${D_GIT_STATUS}"
     O="$(( $O + ${O_GIT_STATUS} ))"
-
+    D="${D}${D_PREVIOUS_EXIT_STATUS}"
+    O="$(( $O + ${O_PREVIOUS_EXIT_STATUS} ))"
     D="${D}${D_VENV}"
     O="$(( $O + ${O_VENV} ))"
 
+    # D="${D}~~ %? ~~"
+    # D="${D} -- %(?. ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}OK. ${COLOR_SEPERATOR}· ${COLOR4}Error: %?)"
+
+    # PSPS="%(?. ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}OK. ${COLOR_SEPERATOR}· ${COLOR4}Error: %?)"
+    # PSPS="%(?.OK.Error)"
+    # D="${D}aaaa${#PSPS}aaaa"
+    
 
     FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
     D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
     D="${D}$(show_timer)"
     D="${D}${COLOR_BORDER}│"
-
-    # D="${D}- ${O_TIMER} - ${#D_TIMER}"
-    
 
     P=""
     P="${P}${TOP_LINE}"
@@ -250,7 +258,7 @@ function precmd() {
     P="${P}${NEWLINE}"
     P="${P}${BOTTOM_LINE}"
     P="${P}${NEWLINE}"
-    PROMPT="${P}%f%b$ "
+    PS1="${P}%f%b$ "
 
 
     # PROMPT_LINE="${NEWLINE}${NEWLINE}%B${COLOR_BORDER}╒$(printf '═%.0s' {2..$(tput cols)})${NEWLINE}"
