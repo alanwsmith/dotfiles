@@ -241,20 +241,16 @@ function precmd() {
     D="${D}${D_VENV}"
     O="$(( $O + ${O_VENV} ))"
 
-    # D="${D}~~ %? ~~"
-    # D="${D} -- %(?. ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}OK. ${COLOR_SEPERATOR}· ${COLOR4}Error: %?)"
-
-    # PSPS="%(?. ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}OK. ${COLOR_SEPERATOR}· ${COLOR4}Error: %?)"
-    # PSPS="%(?.OK.Error)"
-    # D="${D}aaaa${#PSPS}aaaa"
-    
-
+    # Define the final colum here since you need to know the rest of the 
+    # prompt first
     FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
     D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
+
     D="${D}$(show_timer)"
     D="${D}${COLOR_BORDER}│"
 
     P=""
+    P="${P}${NEWLINE}"
     P="${P}${TOP_LINE}"
     P="${P}${NEWLINE}"
     P="${P}${D}"
