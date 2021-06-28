@@ -250,7 +250,6 @@ function precmd() {
     D="${D}${COLOR_BORDER}│"
 
     P=""
-    P="${P}${NEWLINE}"
     P="${P}${TOP_LINE}"
     P="${P}${NEWLINE}"
     P="${P}${D}"
@@ -260,78 +259,6 @@ function precmd() {
     PS1="${P}%f%b$ "
 
 
-    # PROMPT_LINE="${NEWLINE}${NEWLINE}%B${COLOR_BORDER}╒$(printf '═%.0s' {2..$(tput cols)})${NEWLINE}"
-
-# 
-# 
-# 
-# 
-#     # TODO: Get OK showing up again with the proper
-#     # lenght header
-#     # PROMPT="${PROMPT}%(?. ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}OK. ${COLOR_SEPERATOR}· ${COLOR4}Error: %?)"
-#     # OFFSET=$(($OFFSET+${OFFSET_SEPERATOR}+${OFFSET_SECONDARY}))
-# 
-#     PROMPT="${PROMPT}$(show_python_venv)"
-#     OFFSET=$(($OFFSET+$?))
-# 
-#     PROMPT="${PROMPT}$(show_timer)"
-#     OFFSET=$(($OFFSET+$?))
-# 
-#     # PROMPT="${PROMPT} "
-#     # PROMPT="${PROMPT}${COLOR_BORDER} "
-#     # OFFSET=$(($OFFSET+$C1OFFSET))
-# 
-#     # COUNTER=$(( ${#PROMPT} - $OFFSET + 1))
-#     # COUNTER=$(( $(tput cols) - ${#PROMPT} - $OFFSET + 1))
-#     
-#     # COUNTER=$(( $(tput cols) - ${#PROMPT} + $OFFSET ))
-#     COUNTER=$(( ${#PROMPT} - $OFFSET ))
-#     PROMPT_LINE="${COLOR_BORDER}"
-# #     PROMPT_LINE="${PROMPT_LINE}┌$(printf '─%.0s' {2..$COUNTER})"
-#     PROMPT_LINE="${PROMPT_LINE}$(printf '═%.0s' {2..$COUNTER})"
-#     PROMPT_LINE="${PROMPT_LINE}${NEWLINE}"
-# 
-#     # PROMPT="${PROMPT}${COUNTER}"
-# #     PROMPT="${PROMPT}${COLOR_SEPERATOR}"
-# #     while [ $COUNTER -le $(tput cols) ]
-# #     do
-# #         PROMPT="${PROMPT}─"
-# #         COUNTER=$[$COUNTER+1]
-# #     done
-#     # PROMPT="${PROMPT}-${#PROMPT}-$(tput cols)"
-#     #
-#     # PROMPT="${PROMPT} - ${COUNTER}"
-# 
-#     PROMPT="${PROMPT}${COLOR_BORDER}"
-#     # PROMPT="${PROMPT}└ "
-#     PROMPT="${PROMPT}${COLOR_BORDER}"
-#     # PROMPT="${PROMPT}%(!.#.└) "
-#     
-#     ###########
-#     # PROMPT_LINE2="${NEWLINE}%B${COLOR_BORDER}╒$(printf '═%.0s' {2..$(tput cols)})${NEWLINE}"
-#     PROMPT_LINE2="${NEWLINE}%B${COLOR_BORDER}╭$(printf '─%.0s' {3..$(tput cols)})╮${NEWLINE}"
-#     # PROMPT="${NEWLINE}${COLOR_BORDER}╒${PROMPT_LINE}${PROMPT}"
-#     #
-#     PROMPT="${PROMPT_LINE2}${PROMPT}"
-#     
-#     # REMAINDER=$(($(tput cols) - ${#PROMPT} - ${OFFSET}))
-# 
-#     PROMPT="${PROMPT}$(printf '═%.0s' {1..${REMAINDER}})"
-#     PROMPT="${PROMPT}${NEWLINE}${REMAINDER}"
-# 
-#     # PROMPT_LINE_FULL="$(printf '═%.0s' {2..$(tput cols)})${NEWLINE}"
-#     PROMPT_LINE_FULL="$(printf '─%.0s' {3..$(tput cols)})╯${NEWLINE}"
-#     PROMPT="${PROMPT}${COLOR_BORDER}╰${PROMPT_LINE_FULL}"
-#     ###########
-#     
-#     # PROMPT="${PROMPT}${COLOR_BORDER}└${PROMPT_LINE_FULL}"
-#     # PROMPT="${PROMPT}${COLOR_BORDER}╘${PROMPT_LINE_FULL}"
-#     # PROMPT="${PROMPT}${COLOR_BORDER}╘${PROMPT_LINE}"
-#     PROMPT="${PROMPT}%f"
-#     PROMPT="${PROMPT}%(!.#.$) "
-#     PROMPT="${PROMPT}%f"
-# 
-# 
 # 
 #     if [ $(tput cols) -le 50 ]; then
 #         PROMPT="%B"
