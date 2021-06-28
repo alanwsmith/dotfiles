@@ -74,16 +74,6 @@ export LS_COLORS='di=1:fi=34:ln=31:pi=5:so=5:bd=5:cd=5:or=31'
 # Prmopt stuff
 
 NEWLINE=$'\n'
-# COLOR_BORDER='%F{19}'
-# COLOR_BORDER='%F{124}'
-# COLOR_SEPERATOR='%F{8}'
-# COLOR_SEPERATOR='%F{252}'
-COLOR3='%F{88}'
-COLOR4='%F{160}'
-COLOR5='%F{20}'
-COLOR6='%F{33}'
-# COLOR_SEPERATOR='%F{22}'
-COLOR8='%F{130}'
 
 COLOR_PROMPT='%F{15}'
 COLOR_BORDER='%F{248}'
@@ -102,16 +92,7 @@ OFFSET_TERTIARY="${#COLOR_TERTIARY}"
 OFFSET_VENV="${#COLOR_VENV}"
 OFFSET_ERROR="${#COLOR_ERROR}"
 
-C1OFFSET=7
-C2OFFSET=7
-C3OFFSET=6
-C4OFFSET=7
-C5OFFSET=6
-C6OFFSET=6
-C7OFFSET=6
-C8OFFSET=7
-
-OFFSET=0
+### 
 
 function preexec() {
     timer=$(($(print -P %D{%s%6.})/1000))
@@ -151,9 +132,7 @@ function show_timer() {
     now=$(($(print -P %D{%s%6.})/1000))
     elapsed=$(($now-$timer))
     elapsed_2=$((elapsed/1000))
-    # echo " ${COLOR_SEPERATOR}· ${COLOR_BORDER}${elapsed_2}. sec"
     seconds_with_decimals=$(echo $elapsed|awk '{printf "%.2f",$0/1000}')
-    # echo " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}${seconds_with_decimals}sec"
     echo "${COLOR_SECONDARY}${seconds_with_decimals}sec "
     unset timer
     return $OFFSET_SECONDARY
@@ -172,9 +151,9 @@ function prompt_python_venv() {
     fi
 }
 
-function short_prompt() {
-        echo $PWD | awk -F/ '{ for (i=2;i<NF;i++) { prompt=sprintf ("%s/%.1s", prompt, $i) } prompt=sprintf("%s/%s", prompt, $NF) } END { print prompt }'
-}
+# function short_prompt() {
+#        echo $PWD | awk -F/ '{ for (i=2;i<NF;i++) { prompt=sprintf ("%s/%.1s", prompt, $i) } prompt=sprintf("%s/%s", prompt, $NF) } END { print prompt }'
+# }
 
 function prompt_directory() {
     echo -n "${COLOR_PRIMARY}nexus:$(dirs)"
