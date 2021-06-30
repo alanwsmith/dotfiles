@@ -186,47 +186,71 @@ function precmd() {
 
     PREVIOUS_EXIT_CODE=$?
 
+    P_WIDTH=$(tput cols)
+
     TOP_LINE="${COLOR_BORDER}╭$(printf '─%.0s' {3..$(tput cols)})╮"
     BOTTOM_LINE="${COLOR_BORDER}╰$(printf '─%.0s' {3..$(tput cols)})╯"
 
     D_DIRECTORY=$(prompt_directory)
     O_DIRECTORY=$?
+    C_DIRECTORY=$(( ${#D_DIRECTORY} - $O_DIRECTORY ))
     D_CLOCK=$(prompt_clock)
     O_CLOCK=$?
+    C_CLOCK=$(( ${#D_CLOCK} - $O_CLOCK ))
     D_PREVIOUS_EXIT_STATUS=$(prompt_previous_exit_code $PREVIOUS_EXIT_CODE)
     O_PREVIOUS_EXIT_STATUS=$?
+    C_PREVIOUS_EXIT_STATUS=$(( ${#D_PREVIOUS_EXIT_STATUS} - $O_PREVIOUS_EXIT_STATUS ))
     D_GIT_BRANCH=$(prompt_git_branch)
     O_GIT_BRANCH=$?
+    C_GIT_BRANCH=$(( ${#D_GIT_BRANCH} - $O_GIT_BRANCH ))
     D_GIT_STATUS=$(prompt_git_status)
     O_GIT_STATUS=$?
+    C_GIT_STATUS=$(( ${#D_GIT_STATUS} - $O_GIT_STATUS ))
     D_VENV=$(prompt_python_venv)
     O_VENV=$?
+    C_VENV=$(( ${#D_VENV} - $O_VENV ))
     D_TIMER=$(show_timer)
     O_TIMER=$?
+    C_TIMER=$(( ${#D_TIMER} - $O_TIMER ))
 
-    D="│ "
-    O=0
 
-    D="${D}${D_DIRECTORY}"
-    O="$(( $O + ${O_DIRECTORY} ))"
-    D="${D}${D_CLOCK}"
-    O="$(( $O + ${O_CLOCK} ))"
-    D="${D}${D_GIT_BRANCH}"
-    O="$(( $O + ${O_GIT_BRANCH} ))"
-    D="${D}${D_GIT_STATUS}"
-    O="$(( $O + ${O_GIT_STATUS} ))"
-    D="${D}${D_PREVIOUS_EXIT_STATUS}"
-    O="$(( $O + ${O_PREVIOUS_EXIT_STATUS} ))"
-    D="${D}${D_VENV}"
-    O="$(( $O + ${O_VENV} ))"
+    # This is for padding some white space between things...
+    D_PADDING=8
 
-    # Define the final colum here since you need to know the rest of the 
-    # prompt first
-    FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
-    D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
-
-    D="${D}$(show_timer)"
-    D="${D}${COLOR_BORDER}│"
+    # D_DIRECTORY_PAD=$(( ${#D_DIRECTORY} + 30 ))
+    if [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_CLOCK + $C_PREVIOUS_EXIT_STATUS + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV + $C_TIMER )) ]]; then  
+        D="│ "
+        O=0
+        D="${D}${D_DIRECTORY}"
+        O="$(( $O + ${O_DIRECTORY} ))"
+        D="${D}${D_CLOCK}"
+        O="$(( $O + ${O_CLOCK} ))"
+        D="${D}${D_GIT_BRANCH}"
+        O="$(( $O + ${O_GIT_BRANCH} ))"
+        D="${D}${D_GIT_STATUS}"
+        O="$(( $O + ${O_GIT_STATUS} ))"
+        D="${D}${D_PREVIOUS_EXIT_STATUS}"
+        O="$(( $O + ${O_PREVIOUS_EXIT_STATUS} ))"
+        D="${D}${D_VENV}"
+        O="$(( $O + ${O_VENV} ))"
+        # Define the final colum here since you need to know the rest of the 
+        # prompt first
+        FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
+        D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
+        D="${D}$(show_timer)"
+        D="${D}${COLOR_BORDER}│"
+    else
+        D="│ "
+        O=0
+        D="${D}${D_DIRECTORY}"
+        O="$(( $O + ${O_DIRECTORY} ))"
+        D="${D}${D_CLOCK}"
+        O="$(( $O + ${O_CLOCK} ))"
+        FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
+        D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
+        D="${D}$(show_timer)"
+        D="${D}${COLOR_BORDER}│"
+    fi
 
     P=""
     P="${P}${TOP_LINE}"
