@@ -160,6 +160,7 @@ function prompt_directory() {
     return ${OFFSET_PRIMARY}
 }
 
+
 function prompt_clock() {
     AM_PM=$(date +%p) 
     if [[ $AM_PM == "PM" ]]; then
@@ -217,7 +218,6 @@ function precmd() {
     # This is for padding some white space between things...
     D_PADDING=8
 
-    # D_DIRECTORY_PAD=$(( ${#D_DIRECTORY} + 30 ))
     if [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_CLOCK + $C_PREVIOUS_EXIT_STATUS + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV + $C_TIMER )) ]]; then  
         D="│ "
         O=0
@@ -239,13 +239,63 @@ function precmd() {
         D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
         D="${D}$(show_timer)"
         D="${D}${COLOR_BORDER}│"
+    elif [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_PREVIOUS_EXIT_STATUS + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV + $C_TIMER )) ]]; then  
+        D="│ "
+        O=0
+        D="${D}${D_DIRECTORY}"
+        O="$(( $O + ${O_DIRECTORY} ))"
+        D="${D}${D_GIT_BRANCH}"
+        O="$(( $O + ${O_GIT_BRANCH} ))"
+        D="${D}${D_GIT_STATUS}"
+        O="$(( $O + ${O_GIT_STATUS} ))"
+        D="${D}${D_PREVIOUS_EXIT_STATUS}"
+        O="$(( $O + ${O_PREVIOUS_EXIT_STATUS} ))"
+        D="${D}${D_VENV}"
+        O="$(( $O + ${O_VENV} ))"
+        # Define the final colum here since you need to know the rest of the 
+        # prompt first
+        FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
+        D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
+        D="${D}$(show_timer)"
+        D="${D}${COLOR_BORDER}│"
+    elif [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV + $C_TIMER )) ]]; then  
+        D="│ "
+        O=0
+        D="${D}${D_DIRECTORY}"
+        O="$(( $O + ${O_DIRECTORY} ))"
+        D="${D}${D_GIT_BRANCH}"
+        O="$(( $O + ${O_GIT_BRANCH} ))"
+        D="${D}${D_GIT_STATUS}"
+        O="$(( $O + ${O_GIT_STATUS} ))"
+        D="${D}${D_VENV}"
+        O="$(( $O + ${O_VENV} ))"
+        # Define the final colum here since you need to know the rest of the 
+        # prompt first
+        FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
+        D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
+        D="${D}$(show_timer)"
+        D="${D}${COLOR_BORDER}│"
+    elif [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV )) ]]; then  
+        D="│ "
+        O=0
+        D="${D}${D_DIRECTORY}"
+        O="$(( $O + ${O_DIRECTORY} ))"
+        D="${D}${D_GIT_BRANCH}"
+        O="$(( $O + ${O_GIT_BRANCH} ))"
+        D="${D}${D_GIT_STATUS}"
+        O="$(( $O + ${O_GIT_STATUS} ))"
+        D="${D}${D_VENV}"
+        O="$(( $O + ${O_VENV} ))"
+        # Define the final colum here since you need to know the rest of the 
+        # prompt first
+        FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} ))
+        D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
+        D="${D}${COLOR_BORDER}│"
     else
         D="│ "
         O=0
         D="${D}${D_DIRECTORY}"
         O="$(( $O + ${O_DIRECTORY} ))"
-        D="${D}${D_CLOCK}"
-        O="$(( $O + ${O_CLOCK} ))"
         FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
         D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
         D="${D}$(show_timer)"
