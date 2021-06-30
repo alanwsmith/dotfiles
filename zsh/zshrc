@@ -152,8 +152,10 @@ function prompt_python_venv() {
 }
 
 function prompt_short_directory() {
-    SHORT_PROMPT=$(dirs | awk -F/ '{ for (i=2;i<NF;i++) { prompt=sprintf ("%s/%.1s", prompt, $i) } prompt=sprintf("%s/%s", prompt, $NF) } END { print prompt }')
-    echo -n "${COLOR_PRIMARY}~$SHORT_PROMPT"
+    # TODO: Get this to work without deleting/hardcoding the `~` from dirs
+    # SHORT_PROMPT=$(dirs | awk -F/ '{ for (i=2;i<NF;i++) { prompt=sprintf ("%s/%.1s", prompt, $i) } prompt=sprintf("%s/%s", prompt, $NF) } END { print prompt }')
+    SHORT_PROMPT=$(pwd | awk -F/ '{ for (i=2;i<NF;i++) { prompt=sprintf ("%s/%.1s", prompt, $i) } prompt=sprintf("%s/%s", prompt, $NF) } END { print prompt }')
+    echo -n "${COLOR_PRIMARY}$SHORT_PROMPT"
     return ${OFFSET_PRIMARY}
 }
 
@@ -252,6 +254,7 @@ function precmd() {
         D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
         D="${D}$(show_timer)"
         D="${D}${COLOR_BORDER}│"
+
     elif [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_PREVIOUS_EXIT_STATUS + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV + $C_TIMER )) ]]; then  
         D="│ "
         O=0
@@ -271,6 +274,7 @@ function precmd() {
         D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
         D="${D}$(show_timer)"
         D="${D}${COLOR_BORDER}│"
+
     elif [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV + $C_TIMER )) ]]; then  
         D="│ "
         O=0
@@ -288,6 +292,7 @@ function precmd() {
         D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
         D="${D}$(show_timer)"
         D="${D}${COLOR_BORDER}│"
+
     elif [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV )) ]]; then  
         D="│ "
         O=0
@@ -304,7 +309,8 @@ function precmd() {
         FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} ))
         D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
         D="${D}${COLOR_BORDER}│"
-    else
+
+    elif [[ $P_WIDTH -ge $(( $D_PADDING + $C_SHORT_DIRECTORY + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV )) ]]; then  
         D="│ "
         O=0
         D="${D}${D_SHORT_DIRECTORY}"
@@ -313,6 +319,18 @@ function precmd() {
         O="$(( $O + ${O_GIT_BRANCH} ))"
         D="${D}${D_GIT_STATUS}"
         O="$(( $O + ${O_GIT_STATUS} ))"
+        D="${D}${D_VENV}"
+        O="$(( $O + ${O_VENV} ))"
+        # Define the final colum here since you need to know the rest of the 
+        # prompt first
+        FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} ))
+        D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
+        D="${D}${COLOR_BORDER}│"
+    else
+        D="│ "
+        O=0
+        D="${D}${D_SHORT_DIRECTORY}"
+        O="$(( $O + ${O_SHORT_DIRECTORY} ))"
         D="${D}${D_VENV}"
         O="$(( $O + ${O_VENV} ))"
         FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} ))
