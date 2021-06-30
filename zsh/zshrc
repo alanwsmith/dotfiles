@@ -151,14 +151,17 @@ function prompt_python_venv() {
     fi
 }
 
-# function short_prompt() {
-#        echo $PWD | awk -F/ '{ for (i=2;i<NF;i++) { prompt=sprintf ("%s/%.1s", prompt, $i) } prompt=sprintf("%s/%s", prompt, $NF) } END { print prompt }'
-# }
+function prompt_short_directory() {
+    SHORT_PROMPT=$(dirs | awk -F/ '{ for (i=2;i<NF;i++) { prompt=sprintf ("%s/%.1s", prompt, $i) } prompt=sprintf("%s/%s", prompt, $NF) } END { print prompt }')
+    echo -n "${COLOR_PRIMARY}~$SHORT_PROMPT"
+    return ${OFFSET_PRIMARY}
+}
 
 function prompt_directory() {
     echo -n "${COLOR_PRIMARY}nexus:$(dirs)"
     return ${OFFSET_PRIMARY}
 }
+
 
 
 function prompt_clock() {
@@ -195,21 +198,31 @@ function precmd() {
     D_DIRECTORY=$(prompt_directory)
     O_DIRECTORY=$?
     C_DIRECTORY=$(( ${#D_DIRECTORY} - $O_DIRECTORY ))
+
+    D_SHORT_DIRECTORY=$(prompt_short_directory)
+    O_SHORT_DIRECTORY=$?
+    C_SHORT_DIRECTORY=$(( ${#D_SHORT_DIRECTORY} - $O_SHORT_DIRECTORY ))
+
     D_CLOCK=$(prompt_clock)
     O_CLOCK=$?
     C_CLOCK=$(( ${#D_CLOCK} - $O_CLOCK ))
+
     D_PREVIOUS_EXIT_STATUS=$(prompt_previous_exit_code $PREVIOUS_EXIT_CODE)
     O_PREVIOUS_EXIT_STATUS=$?
     C_PREVIOUS_EXIT_STATUS=$(( ${#D_PREVIOUS_EXIT_STATUS} - $O_PREVIOUS_EXIT_STATUS ))
+
     D_GIT_BRANCH=$(prompt_git_branch)
     O_GIT_BRANCH=$?
     C_GIT_BRANCH=$(( ${#D_GIT_BRANCH} - $O_GIT_BRANCH ))
+
     D_GIT_STATUS=$(prompt_git_status)
     O_GIT_STATUS=$?
     C_GIT_STATUS=$(( ${#D_GIT_STATUS} - $O_GIT_STATUS ))
+
     D_VENV=$(prompt_python_venv)
     O_VENV=$?
     C_VENV=$(( ${#D_VENV} - $O_VENV ))
+
     D_TIMER=$(show_timer)
     O_TIMER=$?
     C_TIMER=$(( ${#D_TIMER} - $O_TIMER ))
@@ -294,11 +307,16 @@ function precmd() {
     else
         D="│ "
         O=0
-        D="${D}${D_DIRECTORY}"
-        O="$(( $O + ${O_DIRECTORY} ))"
-        FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
+        D="${D}${D_SHORT_DIRECTORY}"
+        O="$(( $O + ${O_SHORT_DIRECTORY} ))"
+        D="${D}${D_GIT_BRANCH}"
+        O="$(( $O + ${O_GIT_BRANCH} ))"
+        D="${D}${D_GIT_STATUS}"
+        O="$(( $O + ${O_GIT_STATUS} ))"
+        D="${D}${D_VENV}"
+        O="$(( $O + ${O_VENV} ))"
+        FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} ))
         D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
-        D="${D}$(show_timer)"
         D="${D}${COLOR_BORDER}│"
     fi
 
