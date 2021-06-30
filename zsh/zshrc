@@ -1,4 +1,4 @@
-#####################################################################
+####################################################################
 # Exports 
 
 export TERM=screen-256color
@@ -164,8 +164,6 @@ function prompt_directory() {
     return ${OFFSET_PRIMARY}
 }
 
-
-
 function prompt_clock() {
     AM_PM=$(date +%p) 
     if [[ $AM_PM == "PM" ]]; then
@@ -188,6 +186,13 @@ function prompt_previous_exit_code() {
     fi 
 }
 
+function prompt_weather() {
+    WEATHER_STRING=$(cat "/Users/alans/workshop/command_prompt_weather/command_prompt_weather.txt")
+    echo -n " ${COLOR_SEPERATOR}· $WEATHER_STRING"
+    return $OFFSET_SEPERATOR 
+}
+
+
 function precmd() {
 
     PREVIOUS_EXIT_CODE=$?
@@ -196,6 +201,11 @@ function precmd() {
 
     TOP_LINE="${COLOR_BORDER}╭$(printf '─%.0s' {3..$(tput cols)})╮"
     BOTTOM_LINE="${COLOR_BORDER}╰$(printf '─%.0s' {3..$(tput cols)})╯"
+
+
+    D_WEATHER=$(prompt_weather)
+    O_WEATHER=$?
+    C_WEATHER=$(( ${#D_WEATHER} - $O_WEATHER ))
 
     D_DIRECTORY=$(prompt_directory)
     O_DIRECTORY=$?
@@ -248,6 +258,8 @@ function precmd() {
         O="$(( $O + ${O_PREVIOUS_EXIT_STATUS} ))"
         D="${D}${D_VENV}"
         O="$(( $O + ${O_VENV} ))"
+        D="${D}${D_WEATHER}"
+        O="$(( $O + ${O_WEATHER} ))"
         # Define the final colum here since you need to know the rest of the 
         # prompt first
         FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
