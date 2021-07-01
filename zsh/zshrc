@@ -81,7 +81,8 @@ COLOR_BORDER='%F{88}'
 COLOR_PRIMARY='%F{253}'
 COLOR_SECONDARY='%F{241}'
 COLOR_TERTIARY='%F{241}'
-COLOR_SEPERATOR='%F{239}'
+# COLOR_SEPERATOR='%F{239}'
+COLOR_SEPERATOR='%F{241}'
 COLOR_VENV='%F{136}'
 COLOR_ERROR='%F{160}'
 OFFSET_BORDER="${#COLOR_BORDER}"
@@ -154,7 +155,7 @@ function prompt_python_venv() {
 function prompt_short_directory() {
     # TODO: Get this to work without deleting/hardcoding the `~` from dirs
     # SHORT_PROMPT=$(dirs | awk -F/ '{ for (i=2;i<NF;i++) { prompt=sprintf ("%s/%.1s", prompt, $i) } prompt=sprintf("%s/%s", prompt, $NF) } END { print prompt }')
-    SHORT_PROMPT=$(pwd | awk -F/ '{ for (i=2;i<NF;i++) { prompt=sprintf ("%s/%.1s", prompt, $i) } prompt=sprintf("%s/%s", prompt, $NF) } END { print prompt }')
+    SHORT_PROMPT=$(pwd | awk -F/ '{ for (i=2;i<NF;i++) { prompt=sprintf ("%s/%.1s", prompt, $i) } prompt=sprintf("%s/%s", prompt, $NF) } END { print prompt }' | sed 's/\/U\/a/~/')
     echo -n "${COLOR_PRIMARY}$SHORT_PROMPT"
     return ${OFFSET_PRIMARY}
 }
@@ -194,7 +195,7 @@ function prompt_weather() {
 
 
 function precmd() {
-
+ 
     PREVIOUS_EXIT_CODE=$?
 
     P_WIDTH=$(tput cols)
@@ -359,5 +360,9 @@ function precmd() {
     P="${P}${NEWLINE}"
     PS1="${P}%f%b$ "
 
+
 }
+
+# Setup to use vim bindings
+bindkey -v
 
