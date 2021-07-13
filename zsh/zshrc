@@ -73,16 +73,22 @@ export LS_COLORS='di=1:fi=34:ln=31:pi=5:so=5:bd=5:cd=5:or=31'
 ######################################################################
 # Prmopt stuff
 
+
 NEWLINE=$'\n'
 
 COLOR_PROMPT='%F{15}'
-COLOR_BORDER='%F{248}'
-COLOR_BORDER='%F{88}'
-COLOR_PRIMARY='%F{253}'
+# COLOR_BORDER='%F{248}'
+# COLOR_BORDER='%F{88}'
+# COLOR_BORDER='%F{81}'
+COLOR_BORDER='%F{15}'
+# COLOR_PRIMARY='%F{253}'
+COLOR_PRIMARY='%F{15}'
 COLOR_SECONDARY='%F{241}'
+# COLOR_SECONDARY='%F{15}'
 COLOR_TERTIARY='%F{241}'
 # COLOR_SEPERATOR='%F{239}'
 COLOR_SEPERATOR='%F{241}'
+# COLOR_SEPERATOR='%F{15}'
 COLOR_VENV='%F{136}'
 COLOR_ERROR='%F{160}'
 OFFSET_BORDER="${#COLOR_BORDER}"
@@ -102,8 +108,8 @@ function preexec() {
 function prompt_git_branch() {
     BRANCH_NAME=$(git branch --show-current 2> /dev/null)
     if [ $? -eq 0 ]; then
-        echo -n " ${COLOR_SEPERATOR}· [$BRANCH_NAME]"
-        return $OFFSET_SEPERATOR
+        echo -n " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}[$BRANCH_NAME]"
+        return $(( $OFFSET_SEPERATOR + $OFFSET_SECONDARY ))
     else
         return 0
     fi 
@@ -168,19 +174,19 @@ function prompt_directory() {
 function prompt_clock() {
     AM_PM=$(date +%p) 
     if [[ $AM_PM == "PM" ]]; then
-        echo -n " ${COLOR_SEPERATOR}· "
+        echo -n " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}"
         date +%-I:%Mp
     else 
-        echo -n " ${COLOR_SEPERATOR}· "
+        echo -n " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}"
         date +%-I:%Ma
     fi 
-    return $OFFSET_SEPERATOR
+    return $(( $OFFSET_SEPERATOR + $OFFSET_SECONDARY ))
 }
 
 function prompt_previous_exit_code() {
     if [[ $1 -eq 0 ]]; then
-        echo " ${COLOR_SEPERATOR}· OK"
-        return $OFFSET_SEPERATOR
+        echo " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}OK"
+        return $(( $OFFSET_SEPERATOR + $OFFSET_SECONDARY ))
     else
         echo " ${COLOR_SEPERATOR}· ${COLOR_ERROR}ERROR: $1"
         return $(( $OFFSET_SEPERATOR + $OFFSET_ERROR ))
@@ -189,10 +195,9 @@ function prompt_previous_exit_code() {
 
 function prompt_weather() {
     WEATHER_STRING=$(cat "/Users/alans/workshop/command_prompt_weather/command_prompt_weather.txt")
-    echo -n " ${COLOR_SEPERATOR}· $WEATHER_STRING"
-    return $OFFSET_SEPERATOR 
+    echo -n " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}$WEATHER_STRING"
+    return $(( $OFFSET_SEPERATOR + $OFFSET_SECONDARY + 1 ))
 }
-
 
 function precmd() {
  
@@ -242,9 +247,10 @@ function precmd() {
 
 
     # This is for padding some white space between things...
-    D_PADDING=8
+    D_PADDING=4
 
-    if [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_CLOCK + $C_PREVIOUS_EXIT_STATUS + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV + $C_TIMER )) ]]; then  
+    #if [[ $P_WIDTH -ge $(( $D_PADDING + $C_HUMIDITY + $C_DIRECTORY + $C_CLOCK + $C_PREVIOUS_EXIT_STATUS + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV + $C_TIMER )) ]]; then  
+    if [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_CLOCK + $C_PREVIOUS_EXIT_STATUS + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV + $C_WEATHER + $C_TIMER )) ]]; then  
         D="│ "
         O=0
         D="${D}${D_DIRECTORY}"
@@ -261,6 +267,8 @@ function precmd() {
         O="$(( $O + ${O_VENV} ))"
         D="${D}${D_WEATHER}"
         O="$(( $O + ${O_WEATHER} ))"
+        # D="${D}${D_HUMIDITY}"
+        # O="$(( $O + ${O_HUMIDITY} ))"
         # Define the final colum here since you need to know the rest of the 
         # prompt first
         FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
@@ -364,5 +372,9 @@ function precmd() {
 }
 
 # Setup to use vim bindings
-bindkey -v
+# bindkey -v
+
+# Setup so up/down arrows go based of existing text
+bindkey '^[[A' up-line-or-search
+bindkey '^[[B' down-line-or-search
 

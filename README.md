@@ -17,8 +17,5 @@ Suggestions welcome.
 
 -a 
 
-This is a test line, by the way, 
-while I'm working on the prompt. 
-
 
 
