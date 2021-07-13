@@ -13,9 +13,5 @@ I'm not sure how other folks do it, but I'm keeping
 these all in one directory and then sym link to them
 from wherever the actual locations are. 
 
-Suggestions welcome. 
-
 -a 
-
-
 
