@@ -18,7 +18,6 @@ function e () {
     exit 
 }
 
-
 # TODO: Update this so it takes more than one argument
 function nv () {
 	nvim $1
