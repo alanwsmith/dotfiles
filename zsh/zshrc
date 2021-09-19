@@ -367,7 +367,6 @@ function precmd() {
     P="${P}${NEWLINE}"
     PS1="${P}%f%b$ "
 
-
 }
 
 # Setup to use vim bindings
