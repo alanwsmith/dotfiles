@@ -377,3 +377,7 @@ function precmd() {
 bindkey '^[[A' up-line-or-search
 bindkey '^[[B' down-line-or-search
 
+if [ -f ~/.zshrc-private ]; then
+    source ~/.zshrc-private
+fi
+
