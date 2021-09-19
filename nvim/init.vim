@@ -91,6 +91,13 @@ set smartcase
 set incsearch
 
 
+
+" Adjust min widht of number column to prevent horizontal 
+" jumping when plugins add content to the column
+set numberwidth=5
+
+
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Remember that doulbe quotes are comments, not `#`.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
