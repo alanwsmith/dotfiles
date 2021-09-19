@@ -6,6 +6,10 @@ export TERM=screen-256color
 ######################################################################
 # Alias style functions 
 
+function sva () {
+    source venv/bin/activate
+}
+
 function rc () {
     exec zsh 
 }
