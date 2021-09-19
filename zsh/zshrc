@@ -52,13 +52,14 @@ alias l="ls -lh"
 # Copy file or dir path to pasteboard
 
 function pwc() {
-    if [ -z "$1" ]
-    then
-        pwd | tr -d '\n' | pbcopy
-    else
-        initial_string="$(pwd | tr -d '\n')/$1"
-        echo $initial_string | tr -d '\n' | pbcopy
-    fi
+    echo "pwc is deactivted until you figure out how to deal with '~' in the path"
+#     if [ -z "$1" ]
+#     then
+#         pwd | tr -d '\n' | pbcopy
+#     else
+#         initial_string="$(pwd | tr -d '\n')/$1"
+#         echo $initial_string | tr -d '\n' | pbcopy
+#     fi
 }
 
 # Setup so you don't have to type `cd` to get into a directory 
