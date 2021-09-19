@@ -18,12 +18,6 @@ function e () {
     exit 
 }
 
-# These aren't great since they only deal with 
-# one argument. 
-
-function n () {
-	nvim $1
-}
 
 function nv () {
 	nvim $1
