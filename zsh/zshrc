@@ -3,6 +3,15 @@
 
 export TERM=screen-256color
 
+
+######################################################################
+# Include functions 
+
+if [ -d $HOME/.zsh-functions ] 
+then 
+  source $HOME/.zsh-functions/*.zsh
+fi 
+
 ######################################################################
 # Alias style functions 
 
