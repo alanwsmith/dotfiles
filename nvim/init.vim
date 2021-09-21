@@ -5,13 +5,13 @@ call plug#begin("~/.vim/plugged")
 
     Plug 'theHamsta/nvim_rocks', {'do': 'pip3 install --user hererocks && python3 -mhererocks . -j2.1.0-beta3 -r3.0.0 && cp nvim_rocks.lua lua'}
 
+    Plug 'tpope/vim-commentary'
 
 
     " language serve
     "Plug 'neovim/nvim-lspconfig'
 
     "  This one is for commants
-    " Plug 'tpope/vim-commentary'
     " Plug 'nvim-lua/popup.nvim'
     " Plug 'nvim-lua/plenary.nvim'
     " Plug 'norcalli/nvim-terminal.lua'
