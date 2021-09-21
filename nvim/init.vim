@@ -187,6 +187,7 @@ hi Normal ctermbg=NONE
 " Looks like you need both of these to make it work
 let g:prettier#autoformat = 1
 let g:prettier#autoformat_require_pragma = 0
+let g:prettier#quickfix_enabled=0
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
 
