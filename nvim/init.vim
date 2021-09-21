@@ -108,7 +108,7 @@ set signcolumn=number
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let mapleader=','
-" let loaded_matchparen = 1
+let loaded_matchparen = 1
 
 " Setup so `:te` is aliased to expand to `:tabedit`
 cnoreabbrev <expr> te getcmdtype() == ":" && getcmdline() == 'te' ? 'tabedit' : 'te'
