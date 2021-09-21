@@ -98,7 +98,8 @@ set incsearch
 
 " Adjust min widht of number column to prevent horizontal 
 " jumping when plugins add content to the column
-set numberwidth=5
+set numberwidth=4
+set signcolumn=number
 
 
 
