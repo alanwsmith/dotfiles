@@ -1,10 +1,13 @@
 call plug#begin("~/.vim/plugged")
 
 
+    " The main coc plugin that provides prettier too
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+    " nvim_rocks is needed for your grimoire stuff
     Plug 'theHamsta/nvim_rocks', {'do': 'pip3 install --user hererocks && python3 -mhererocks . -j2.1.0-beta3 -r3.0.0 && cp nvim_rocks.lua lua'}
 
+    " I think this is the one that provides the way to do comments
     Plug 'tpope/vim-commentary'
 
 
