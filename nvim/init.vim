@@ -1,7 +1,11 @@
 call plug#begin("~/.vim/plugged")
 
+
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
     Plug 'theHamsta/nvim_rocks', {'do': 'pip3 install --user hererocks && python3 -mhererocks . -j2.1.0-beta3 -r3.0.0 && cp nvim_rocks.lua lua'}
+
+
 
     " language serve
     "Plug 'neovim/nvim-lspconfig'
@@ -154,7 +158,7 @@ lua << EOF
 --local select_vimgrep = snap.get'select.vimgrep'
 --local preview_file = snap.get'preview.file'
 --local preview_vimgrep = snap.get'preview.vimgrep'
-
+--
 -- snap.register.map({'n'}, {'<Leader><Leader>'}, function ()
 --   snap.run({
 --     prompt = 'Grep',
@@ -164,7 +168,7 @@ lua << EOF
 --     views = {preview_vimgrep}
 --   })
 -- end)
-
+--
 -- END TESTING STUFF THAT'S NOT CURRENTLY IN THE MIX
 
 
