@@ -119,6 +119,13 @@ cnoreabbrev <expr> te getcmdtype() == ":" && getcmdline() == 'te' ? 'tabedit' : 
 " Save all files with `,s`
 map <leader>s :wa<cr>
 
+" Copy lines in visual mode to the system pasteboard
+vnoremap <leader>y "+y
+
+" Paste from the system pasteboard in normal mode
+nnoremap <leader>p "+p
+
+
 " Close the current file with a hotkey
 " map <leader>q :q<cr>
 
