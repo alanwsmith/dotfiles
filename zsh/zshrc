@@ -69,6 +69,10 @@ function pwc() {
 #     fi
 }
 
+######################################################################
+#Options 
+######################################################################
+
 # Setup so you don't have to type `cd` to get into a directory 
 setopt AUTO_CD
 setopt CDABLE_VARS
@@ -76,6 +80,10 @@ setopt CDABLE_VARS
 # Set colors for ls
 export CLICOLOR=1
 export LS_COLORS='di=1:fi=34:ln=31:pi=5:so=5:bd=5:cd=5:or=31'
+
+# Don't keep any commands that start with a space to the history log
+setopt HIST_IGNORE_SPACE
+
 
 
 ######################################################################
