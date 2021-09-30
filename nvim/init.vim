@@ -130,9 +130,9 @@ nnoremap <leader>p "+p
 " map <leader>q :q<cr>
 
 """"" Python testing
-" map <leader>m :let $RUN_THIS = expand('%:p')<cr>
-" map <leader>r :!clear; if [ $RUN_THIS ]; then python3 "${RUN_THIS}"; else python3 %; fi<cr>
-" map <leader>R :!clear; python3 %<cr>
+map <leader>m :let $RUN_THIS = expand('%:p')<cr>
+map <leader>r :!if [ $RUN_THIS ]; then python3 "${RUN_THIS}"; else python3 %; fi<cr>
+map <leader>R :!python3 %<cr>
 
 """"""""""""""""""""
 " Telescope
