@@ -120,7 +120,7 @@ cnoreabbrev <expr> te getcmdtype() == ":" && getcmdline() == 'te' ? 'tabedit' : 
 map <leader>s :wa<cr>
 
 " Copy lines in visual mode to the system pasteboard
-vnoremap <leader>y "+y
+noremap <leader>y "+y
 
 " Paste from the system pasteboard in normal mode
 nnoremap <leader>p "+p
