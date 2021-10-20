@@ -9,7 +9,10 @@ export TERM=screen-256color
 
 if [ -d $HOME/.zsh-functions ] 
 then 
-  source $HOME/.zsh-functions/*.zsh
+  for file in $HOME/.zsh-functions/*.zsh
+  do 
+    source "$file"
+  done
 fi 
 
 ######################################################################
