@@ -10,6 +10,9 @@ call plug#begin("~/.vim/plugged")
     " I think this is the one that provides the way to do comments
     Plug 'tpope/vim-commentary'
 
+    " this is for an attempt to get mdx highlighting
+    Plug 'sheerun/vim-polyglot'
+
 
     " language serve
     "Plug 'neovim/nvim-lspconfig'
