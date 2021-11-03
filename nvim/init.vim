@@ -1,23 +1,45 @@
+let mapleader=','
+let loaded_matchparen = 1
+
+" This is what allows you to hit the escape key and immediately
+" be able to hit the leader key. Without it, you either have to
+" hit escape twice, hit leader twice, or wait a full second 
+" before hitting leader.
+set timeoutlen=1000 ttimeoutlen=10
+
 call plug#begin("~/.vim/plugged")
 
-
     " The main coc plugin that provides prettier too
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    " Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
     " nvim_rocks is needed for your grimoire stuff
-    Plug 'theHamsta/nvim_rocks', {'do': 'pip3 install --user hererocks && python3 -mhererocks . -j2.1.0-beta3 -r3.0.0 && cp nvim_rocks.lua lua'}
+    " Plug 'theHamsta/nvim_rocks', {'do': 'pip3 install --user hererocks && python3 -mhererocks . -j2.1.0-beta3 -r3.0.0 && cp nvim_rocks.lua lua'}
 
     " I think this is the one that provides the way to do comments
-    Plug 'tpope/vim-commentary'
+    " Plug 'tpope/vim-commentary'
 
     " this is for an attempt to get mdx highlighting
-    Plug 'sheerun/vim-polyglot'
+    " Plug 'sheerun/vim-polyglot'
+   
+    " Themes
+    " Plug 'danilo-augusto/vim-afterglow'
+    " Plug 'dracula/vim'
+    Plug 'sonph/onehalf', { 'rtp': 'vim' }
 
+    " Prettier
+    Plug 'prettier/vim-prettier', {
+    \ 'do': 'yarn install',
+    \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
+
+
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    " The below things are out of the mix right now
+    """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
     " language serve
-    "Plug 'neovim/nvim-lspconfig'
+    " Plug 'neovim/nvim-lspconfig'
 
-    "  This one is for commants
+    " This one is for commants
     " Plug 'nvim-lua/popup.nvim'
     " Plug 'nvim-lua/plenary.nvim'
     " Plug 'norcalli/nvim-terminal.lua'
@@ -37,16 +59,6 @@ call plug#begin("~/.vim/plugged")
     " Plug 'nvim-lua/completion-nvim'
     " Plug 'norcalli/nvim-colorizer.lua'
     " Plug 'plasticboy/vim-markdown'
-
-    " Themes
-    " Plug 'danilo-augusto/vim-afterglow'
-    " Plug 'dracula/vim'
-    Plug 'sonph/onehalf', { 'rtp': 'vim' }
-
-    " Prettier
-    Plug 'prettier/vim-prettier', {
-    \ 'do': 'yarn install',
-    \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 
 call plug#end()
 
@@ -113,8 +125,6 @@ set signcolumn=number
 " Remember that doulbe quotes are comments, not `#`.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let mapleader=','
-let loaded_matchparen = 1
 
 " Setup so `:te` is aliased to expand to `:tabedit`
 cnoreabbrev <expr> te getcmdtype() == ":" && getcmdline() == 'te' ? 'tabedit' : 'te'
