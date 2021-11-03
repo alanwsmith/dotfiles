@@ -15,6 +15,15 @@ then
   done
 fi 
 
+
+######################################################################
+# TODO: Get private functions into a directory
+
+if [ -f ~/.zshrc-private ]; then
+    source ~/.zshrc-private
+fi
+
+
 ######################################################################
 # Alias style functions 
 
@@ -213,6 +222,7 @@ function prompt_previous_exit_code() {
 }
 
 function prompt_weather() {
+    # TODO: setup to make sure the file exists before trying to use it
     WEATHER_STRING=$(cat "/Users/alans/workshop/command_prompt_weather/command_prompt_weather.txt")
     echo -n " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}$WEATHER_STRING"
     return $(( $OFFSET_SEPERATOR + $OFFSET_SECONDARY + 1 ))
@@ -226,7 +236,6 @@ function precmd() {
 
     TOP_LINE="${COLOR_BORDER}╭$(printf '─%.0s' {3..$(tput cols)})╮"
     BOTTOM_LINE="${COLOR_BORDER}╰$(printf '─%.0s' {3..$(tput cols)})╯"
-
 
     D_WEATHER=$(prompt_weather)
     O_WEATHER=$?
@@ -263,7 +272,6 @@ function precmd() {
     D_TIMER=$(show_timer)
     O_TIMER=$?
     C_TIMER=$(( ${#D_TIMER} - $O_TIMER ))
-
 
     # This is for padding some white space between things...
     D_PADDING=4
@@ -395,11 +403,6 @@ function precmd() {
 # Setup so up/down arrows go based of existing text
 bindkey '^[[A' up-line-or-search
 bindkey '^[[B' down-line-or-search
-
-if [ -f ~/.zshrc-private ]; then
-    source ~/.zshrc-private
-fi
-
 
 # Nice output for git log
 function gl() {
