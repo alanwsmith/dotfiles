@@ -12,6 +12,7 @@ yabai -m rule --add app="Activity Monitor" sticky=on layer=above manage=off
 yabai -m rule --add app="Stickies" sticky=on layer=above manage=off
 yabai -m rule --add app="Archive Utility" sticky=on layer=above manage=off
 yabai -m rule --add app="System Preferences" sticky=on layer=above manage=off
+yabai -m rule --add app="System Information" sticky=on layer=above manage=off
 
 
 # yabai -m config window_shadow off
