@@ -9,17 +9,15 @@ set timeoutlen=1000 ttimeoutlen=10
 
 call plug#begin("~/.vim/plugged")
 
-    " The main coc plugin that provides prettier too
-    " Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
     " nvim_rocks is needed for your grimoire stuff
-    " Plug 'theHamsta/nvim_rocks', {'do': 'pip3 install --user hererocks && python3 -mhererocks . -j2.1.0-beta3 -r3.0.0 && cp nvim_rocks.lua lua'}
+    Plug 'theHamsta/nvim_rocks', {'do': 'pip3 install --user hererocks && python3 -mhererocks . -j2.1.0-beta3 -r3.0.0 && cp nvim_rocks.lua lua'}
 
     " I think this is the one that provides the way to do comments
-    " Plug 'tpope/vim-commentary'
+    Plug 'tpope/vim-commentary'
 
     " this is for an attempt to get mdx highlighting
-    " Plug 'sheerun/vim-polyglot'
+    Plug 'sheerun/vim-polyglot'
    
     " Themes
     " Plug 'danilo-augusto/vim-afterglow'
@@ -31,6 +29,11 @@ call plug#begin("~/.vim/plugged")
     \ 'do': 'yarn install',
     \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 
+
+    " The main coc plugin. I thought this was needed for 
+    " prettier, but it doesnt' look like it. Leaving it
+    " in for now.
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
     """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
     " The below things are out of the mix right now
