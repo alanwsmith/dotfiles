@@ -1,0 +1,15 @@
+#!/bin/bash 
+
+TIMESTAMP=$(date +%Y-%m-%dT%H:%M:%S)
+
+echo "---"
+echo "blurb: ''"
+echo "categories:"
+echo "- Miscellaneous"
+echo "date: '$TIMESTAMP'"
+echo "id: `ksuid | cut -c1-12`"
+echo "scrubbed_2021: true"
+echo "status: scratch"
+echo "type: post"
+echo "---"
+echo ""
