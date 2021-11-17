@@ -1,0 +1,14 @@
+name: post__grimoire_post 
+parent: default
+
+matches:
+  - trigger: ";post"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: script 
+        params:
+          args:
+            - bash
+            - "%CONFIG%/scripts/post.espanso"
+          trim: false
