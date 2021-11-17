@@ -1,0 +1,6 @@
+name: er 
+parent: default
+
+matches:
+  - trigger: ";er"
+    replace: "espanso restart"
