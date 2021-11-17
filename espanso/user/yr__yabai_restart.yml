@@ -1,0 +1,6 @@
+name: yr_yabai_restart 
+parent: default
+
+matches:
+  - trigger: ";yr"
+    replace: "brew services stop yabai && brew services start yabai"
