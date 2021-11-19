@@ -25,6 +25,7 @@ yabai -m rule --add app="GarageBand" sticky=on layer=above manage=off
 yabai -m rule --add app="Better Rename 9" sticky=on layer=above manage=off
 yabai -m rule --add app="Wally" sticky=on layer=above manage=off
 yabai -m rule --add app="Marked 2" sticky=on layer=above manage=off
+yabai -m rule --add app="Docker Desktop" sticky=on layer=above manage=off
 
 
 # yabai -m config window_shadow off
