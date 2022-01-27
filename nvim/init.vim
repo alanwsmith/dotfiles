@@ -7,6 +7,12 @@ let loaded_matchparen = 1
 " before hitting leader.
 set timeoutlen=1000 ttimeoutlen=10
 
+" This is how to run a plug install to load new plugins. run this from the
+" command line
+"
+" nvim +PlugInstall
+"
+
 call plug#begin("~/.vim/plugged")
 
 
@@ -21,8 +27,8 @@ call plug#begin("~/.vim/plugged")
    
     " Themes
     " Plug 'danilo-augusto/vim-afterglow'
-    " Plug 'dracula/vim'
-    Plug 'sonph/onehalf', { 'rtp': 'vim' }
+    Plug 'dracula/vim'
+    " Plug 'sonph/onehalf', { 'rtp': 'vim' }
 
     " Prettier
     Plug 'prettier/vim-prettier', {
@@ -63,7 +69,17 @@ call plug#begin("~/.vim/plugged")
     " Plug 'norcalli/nvim-colorizer.lua'
     " Plug 'plasticboy/vim-markdown'
 
+    " Tried to use this to show both relative and regular normal
+    " numbers at the same time
+    " Plug 'vim-scripts/RltvNmbr.vim'
+    
 call plug#end()
+
+
+" Set F3 to toggle highlight search
+set hlsearch!
+nnoremap <F3> :set hlsearch!<CR>
+
 
 " Disable plasticboy/vim-markdown folding
 " let g:vim_markdown_folding_disabled = 1
@@ -141,14 +157,26 @@ noremap <leader>y "+y
 " Paste from the system pasteboard in normal mode
 nnoremap <leader>p "+p
 
+" Remove highlight:
+map <leader>h :noh<cr>
+
 
 " Close the current file with a hotkey
 " map <leader>q :q<cr>
 
-""""" Python testing
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""" ONLY HAVE ONE OF THESE UNCOMMENTED AT A TIME
+
+""""" Python testing - 
 map <leader>m :let $RUN_THIS = expand('%:p')<cr>
 map <leader>r :!if [ $RUN_THIS ]; then python3 "${RUN_THIS}"; else python3 %; fi<cr>
 map <leader>R :!python3 %<cr>
+
+""""" JavaScript runner
+" map <leader>r :!/usr/bin/env node %<cr>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """"""""""""""""""""
 " Telescope
@@ -216,4 +244,15 @@ let g:prettier#autoformat_require_pragma = 0
 let g:prettier#quickfix_enabled=0
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
+
+" This is how you can auto switch between relative and 
+" absolute line numbers depending on which mode you're in
+" It does cause flashing of the line numbers though, so 
+" not sure if I'm going to keep it. 
+set number
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
+  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
+augroup END
 

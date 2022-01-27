@@ -1,10 +1,14 @@
 yabai -m config layout bsp
 yabai -m config window_placement first_child
-yabai -m config top_padding 8
-yabai -m config bottom_padding 8
-yabai -m config left_padding 8
-yabai -m config right_padding 8
-yabai -m config window_gap 11 
+yabai -m config top_padding 10
+yabai -m config bottom_padding 10
+yabai -m config left_padding 10 
+yabai -m config right_padding 10 
+yabai -m config window_gap 13
+
+# restart this service with this to make changes take effect
+# brew services stop yabai && brew services start yabai
+
 
 
 yabai -m rule --add app="Finder" sticky=on layer=above manage=off
@@ -15,12 +19,12 @@ yabai -m rule --add app="System Preferences" sticky=on layer=above manage=off
 yabai -m rule --add app="System Information" sticky=on layer=above manage=off
 yabai -m rule --add app="VLC" sticky=on layer=above manage=off
 yabai -m rule --add app="QuickTime Player" sticky=on layer=above manage=off
-yabai -m rule --add app="Discord" sticky=on layer=above manage=off
-yabai -m rule --add app="Code" sticky=on layer=above manage=off
-yabai -m rule --add app="Microsoft Teams" sticky=on layer=above manage=off
-yabai -m rule --add app="Sublime Text" sticky=on layer=above manage=off
+# yabai -m rule --add app="Discord" sticky=on layer=above manage=off
+# yabai -m rule --add app="Code" sticky=on layer=above manage=off
+# yabai -m rule --add app="Microsoft Teams" sticky=on layer=above manage=off
+# yabai -m rule --add app="Sublime Text" sticky=on layer=above manage=off
 yabai -m rule --add app="Soulver 2" sticky=on layer=above manage=off
-yabai -m rule --add app="Firefox" sticky=on layer=above manage=off
+# yabai -m rule --add app="Firefox" sticky=on layer=above manage=off
 yabai -m rule --add app="GarageBand" sticky=on layer=above manage=off
 yabai -m rule --add app="Better Rename 9" sticky=on layer=above manage=off
 yabai -m rule --add app="Wally" sticky=on layer=above manage=off
@@ -29,6 +33,11 @@ yabai -m rule --add app="Docker Desktop" sticky=on layer=above manage=off
 yabai -m rule --add app="Spotify" sticky=on layer=above manage=off
 yabai -m rule --add app="FileMerge" sticky=on layer=above manage=off
 yabai -m rule --add app="Alfred Preferences" sticky=on layer=above manage=off
+yabai -m rule --add app="Font Book" sticky=on layer=above manage=off
+yabai -m rule --add app="App Store" sticky=on layer=above manage=off
+yabai -m rule --add app="Adobe Bridge 2022" sticky=on layer=above manage=off
+# yabai -m rule --add app="Preview" sticky=on layer=above manage=off
+yabai -m rule --add app="Amazon Workspaces" sticky=on layer=above manage=off
 
 
 # yabai -m config window_shadow off
