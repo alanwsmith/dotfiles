@@ -1,15 +1,14 @@
 # TheDotsOfAlan
 
-My collection of dotfiles
+This is my collection of dotfiles
 
-My machine is a mac running macOS Big Sur. I use the
-built in zsh. I've used oh-my-zsh in the past, but
-I haven't installed it yet for this build. I'm
-adding thing myself to learn more about how things
-work.
+My machine is a mac running macOS Monterey. I use the
+built in zsh. While I've used oh-my-zsh in the past, 
+I decided to run stock and build my own customizations
+to learn more about how things work.
 
-I'm not sure how other folks do it, but I'm keeping
-these all in one directory and then sym link to them
-from wherever the actual locations are.
+My approach for these files it to keep everything in
+the repo directory and then use symbolic links to make
+them appear in their proper places.
 
 -a
